@@ -16,6 +16,8 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+var today = new Date();
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,7 +38,7 @@ app.post('/postFile', function(req, res){
   var player = req.body.player;
   var team = req.body.team;
   var author = req.body.author;
-  
+
   client.get('search/tweets', { q: player+' '+team+' since:2011-11-11', count: 10 },
   function(err, data, response) {
     for (var indx in data.statuses) {
@@ -44,9 +46,17 @@ app.post('/postFile', function(req, res){
     console.log('on: ' + tweet.created_at + ' : @' + tweet.user.screen_name + ' : ' + tweet.text+'\n\n');
     }
   });
+  client.get('search/tweets', { q: player + ' to ' + team + 'since:' + date},
+  function(err, data, response) {
+    count = 0;
+    for (var indx in data.statuses) {
+      var tweet = data.statuses[indx];
+      count++;
+    }
+    console.log('Date: ' + date + ': ' + count + '\n\n');
+  });
   res.send(req.body);
 });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

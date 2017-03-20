@@ -70,6 +70,7 @@ app.post('/postFile', function(req, res){
     }
   });
 
+  app.set('lastWeekCount',lastWeekCount);
   res.send(req.body);
 });
 

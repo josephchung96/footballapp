@@ -19,6 +19,16 @@ block content
         div.inner.cover
           h1.cover-heading Trends
           p Testing!
+          table
+            thead
+              tr
+                th Elements
+                th Content
+            tbody
+              each val, i in temp
+                tr
+                  td= i
+                  td= val
         div.mastfoot
           div.inner
             canvas#myChart(width='400', height='400')

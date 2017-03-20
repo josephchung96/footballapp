@@ -18,16 +18,9 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 var today = new Date();
-<<<<<<< HEAD
-var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-var lastWeek = new Date();
-var dates = [];
-var frequency = [];
-=======
 var lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
 
 var app = express();
->>>>>>> 02e376c1f673ebf458df787c6e5ce5b2b2ac2750
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -45,12 +38,12 @@ app.use('/', index);
 app.use('/users', users);
 app.post('/postFile', function(req, res){
   //console.log(JSON.stringify(req.body));
-  
-  
+
+
   var player = req.body.player;
   var team = req.body.team;
   var author = req.body.author;
-  
+
   /*
   client.get('search/tweets', { q: player+' '+team+' since:2011-11-11', count: 10 },
   function(err, data, response) {
@@ -59,42 +52,24 @@ app.post('/postFile', function(req, res){
     console.log('on: ' + tweet.created_at + ' : @' + tweet.user.screen_name + ' : ' + tweet.text+'\n\n');
     }
   });
-<<<<<<< HEAD
-  for (i=6;i>-1;i--) {
-    lastWeek.setDate(today.getDate() - i);
-    var previousWeek = lastWeek.getFullYear()+'-'+(lastWeek.getMonth()+1)+'-'+lastWeek.getDate();
-    client.get('search/tweets', { q: player + ' to ' + team + 'since:' + previousWeek},
-    function(err, data, response) {
-      count = 0;
-      for (var indx in data.statuses) {
-        var tweet = data.statuses[indx];
-        count++;
-      }
-      dates.push(previousWeek);
-      frequency.push(count);
-      console.log('Date: ' + previousWeek + ': ' + count + '\n\n');
-    });
-  }
-=======
   */
   var lastWeekYYYYMMDD = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + lastWeek.getDate();
   var lastWeekCount = new Array(7).fill(0);
-  
+
   var query = { q: player + ' to ' + team + 'since:' + lastWeekYYYYMMDD, count: 100 }
-  
+
   client.get('search/tweets', query, function(err, data, response) {
 	for (var indx in data.statuses) {
       var tweet= data.statuses[indx];
 	  var createdAt = new Date(Date.parse(tweet.created_at));
 	  lastWeekCount[createdAt.getDate()-lastWeek.getDate()-1] += 1;
     }
-	
+
 	for (day=0;day<lastWeekCount.length;day++) {
       console.log("Day" + day + ":" + lastWeekCount[day]);
     }
   });
-   
->>>>>>> 02e376c1f673ebf458df787c6e5ce5b2b2ac2750
+
   res.send(req.body);
 });
 

@@ -38,12 +38,12 @@ app.use('/', index);
 app.use('/users', users);
 app.post('/postFile', function(req, res){
   //console.log(JSON.stringify(req.body));
-  
-  
+
+
   var player = req.body.player;
   var team = req.body.team;
   var author = req.body.author;
-  
+
   /*
   client.get('search/tweets', { q: player+' '+team+' since:2011-11-11', count: 10 },
   function(err, data, response) {
@@ -55,21 +55,21 @@ app.post('/postFile', function(req, res){
   */
   var lastWeekYYYYMMDD = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + lastWeek.getDate();
   var lastWeekCount = new Array(7).fill(0);
-  
+
   var query = { q: player + ' to ' + team + 'since:' + lastWeekYYYYMMDD, count: 100 }
-  
+
   client.get('search/tweets', query, function(err, data, response) {
 	for (var indx in data.statuses) {
       var tweet= data.statuses[indx];
 	  var createdAt = new Date(Date.parse(tweet.created_at));
 	  lastWeekCount[createdAt.getDate()-lastWeek.getDate()-1] += 1;
     }
-	
+
 	for (day=0;day<lastWeekCount.length;day++) {
       console.log("Day" + day + ":" + lastWeekCount[day]);
     }
   });
-   
+
   res.send(req.body);
 });
 

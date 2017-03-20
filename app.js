@@ -18,6 +18,7 @@ var users = require('./routes/users');
 var app = express();
 var today = new Date();
 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+var lastWeek = new Date();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,15 +47,19 @@ app.post('/postFile', function(req, res){
     console.log('on: ' + tweet.created_at + ' : @' + tweet.user.screen_name + ' : ' + tweet.text+'\n\n');
     }
   });
-  client.get('search/tweets', { q: player + ' to ' + team + 'since:' + date},
-  function(err, data, response) {
-    count = 0;
-    for (var indx in data.statuses) {
-      var tweet = data.statuses[indx];
-      count++;
-    }
-    console.log('Date: ' + date + ': ' + count + '\n\n');
-  });
+  for (i=7;i>0;i--) {
+    lastWeek.setDate(today.getDate() - i);
+    var previousWeek = lastWeek.getFullYear()+'-'+(lastWeek.getMonth()+1)+'-'+lastWeek.getDate();
+    client.get('search/tweets', { q: player + ' to ' + team + 'since:' + previousWeek},
+    function(err, data, response) {
+      count = 0;
+      for (var indx in data.statuses) {
+        var tweet = data.statuses[indx];
+        count++;
+      }
+      console.log('Date: ' + previousWeek + ': ' + count + '\n\n');
+    });
+  }
   res.send(req.body);
 });
 

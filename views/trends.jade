@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  div.site-wrapper
+    div.site-wrapper-inner
+      div.cover-container
+        div.masthead.clearfix
+          div.inner
+            h3.masthead-brand Logo
+            nav
+              ul.nav.masthead-nav
+                li.active
+                  a(href='#') Home
+                li
+                  a(href='/trends') Trends
+                li
+                  a(href='#') Todo
+
+        div.inner.cover
+          h1.cover-heading Trends
+          p Testing!
+        div.mastfoot
+          div.inner
+            canvas#myChart(width='400', height='400')
+            script.
+              var getChart = document.getElementById("myChart");
+
+block script
+  script(src='/js/trends.js')

@@ -5,6 +5,9 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+router.get('/trends', function(req, res, next){
+  res.render('trends', { title: 'Trends' });
+})
 router.post('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });

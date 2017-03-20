@@ -10,8 +10,7 @@ function validateForm() {
 	if (init!='@' && init!='') {
 		alert("Team name must be a Twitter handle");
         return false;
-	}else{	
-		console.log(JSON.stringify($("#search").serializeObject()));
+	}else{
 		sendAjaxQuery('postFile', JSON.stringify($("#search").serializeObject()));
 	}
 }
@@ -22,11 +21,9 @@ function sendAjaxQuery(url, data) {
 		url: url,
 		data: data,
 		contentType: 'application/json',
-		success: function (data) {
-			alert('success ');			
+		success: function (data) {	
 		},
 		error: function (xhr, status, error) {
-			alert('err :'+error)
 		}
 	});
 }

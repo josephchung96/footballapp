@@ -60,10 +60,10 @@ app.post('/postFile', function(req, res){
 
   client.get('search/tweets', query, function(err, data, response) {
 	for (var indx in data.statuses) {
-      var tweet= data.statuses[indx];
+    var tweet= data.statuses[indx];
 	  var createdAt = new Date(Date.parse(tweet.created_at));
 	  lastWeekCount[createdAt.getDate()-lastWeek.getDate()-1] += 1;
-    }
+  }
 
 	for (day=0;day<lastWeekCount.length;day++) {
       console.log("Day" + day + ":" + lastWeekCount[day]);

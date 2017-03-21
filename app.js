@@ -18,7 +18,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 var today = new Date();
-var lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+var lastWeek = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
 
 var app = express();
 
@@ -55,18 +55,21 @@ app.post('/postFile', function(req, res){
   */
   var lastWeekYYYYMMDD = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + lastWeek.getDate();
   var lastWeekCount = new Array(7).fill(0);
+  var lastWeekDates = new Array(7).fill(0);
 
   var query = { q: player + ' to ' + team + 'since:' + lastWeekYYYYMMDD, count: 100 }
 
   client.get('search/tweets', query, function(err, data, response) {
-	for (var indx in data.statuses) {
-    var tweet= data.statuses[indx];
-	  var createdAt = new Date(Date.parse(tweet.created_at));
-	  lastWeekCount[createdAt.getDate()-lastWeek.getDate()-1] += 1;
-  }
+  	for (var indx in data.statuses) {
+      var tweet= data.statuses[indx];
+  	  var createdAt = new Date(Date.parse(tweet.created_at));
+  	  lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
+    }
 
-	for (day=0;day<lastWeekCount.length;day++) {
-      console.log("Day" + day + ":" + lastWeekCount[day]);
+    console.log('Player: ' + player + ' & Team: ' + team);
+  	for (day=0;day<lastWeekCount.length;day++) {
+      lastWeekDates[day] = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + (lastWeek.getDate()+day);
+      console.log(lastWeekDates[day] + ": " + lastWeekCount[day]);
     }
   });
 

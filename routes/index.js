@@ -7,11 +7,13 @@ router.get('/', function(req, res, next) {
 });
 router.get('/trends', function(req, res, next){
   var lastWeekCount = req.app.get('lastWeekCount');
+  var lastWeekDates = req.app.get('lastWeekDates');
   console.log(lastWeekCount==null);
-  if (lastWeekCount==null) {
+  console.log(lastWeekDates==null);
+  if (lastWeekCount==null || lastWeekDates==null) {
     res.render('trends', { title: 'Trends' });
   }else{
-    res.render('trends', { title: 'Trends', temp: lastWeekCount });
+    res.render('trends', { title: 'Trends', lwCount: lastWeekCount, lwDate: lastWeekDates });
   }
 })
 router.post('/', function(req, res, next) {

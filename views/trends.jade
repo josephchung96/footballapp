@@ -9,27 +9,26 @@ block content
             h3.masthead-brand Logo
             nav
               ul.nav.masthead-nav
-                li.active
-                  a(href='/') Home
                 li
+                  a(href='/') Home
+                li.active
                   a(href='/trends') Trends
                 li
                   a(href='#') Todo
 
         div.inner.cover
           h1.cover-heading Trends
-          p Testing!
-          if temp
-            table
-              thead
-                tr
-                  th Elements
-                  th Content
-              tbody
-                each val, i in temp
+            if lwCount && lwDates
+              table
+                thead
                   tr
-                    td= i
-                    td= val
+                    th Date
+                    th Frequency
+                tbody
+                  each val, i in lastWeekCount
+                    tr
+                      td= i
+                      td= val
         div.mastfoot
           div.inner
             canvas#myChart(width='400', height='400')

@@ -1,0 +1,27 @@
+extend layout
+
+block content
+  div.site-wrapper
+    div.site-wrapper-inner
+      div.cover-container
+        div.masthead.clearfix
+          div.inner
+            h3.masthead-brand Logo
+            nav
+              ul.nav.masthead-nav
+                li
+                  a(href='/') Home
+                li
+                  a(href='/trends') Trends
+                li
+                  a(href='#') Todo
+                li.active
+                  a(href='/output') Search
+        div.inner.cover
+          h1.cover-heading Search results:
+          script(type='text/javascript').
+            var data = !{JSON.stringify(tweetData)};
+            
+  
+          
+          

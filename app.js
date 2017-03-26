@@ -1,4 +1,6 @@
+// module dependencies..
 var express = require('express');
+var router = express.Router();
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -6,20 +8,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var Twit = require('twit');
 var Promise = require("bluebird");
-
+var http = require('http');
 var client = new Twit({
   consumer_key: '5Sqzd11fpZ94Z33NtlXjU4b2W',
   consumer_secret: 'PFsR1I1gtU0vwADTunZPzkgteOobvSLmCZQYhgnups3weHOUJy',
   access_token: '1860715854-o7iTu0wVqd9jSyyS4rLNsmjq6CJSKd7xvwsnoBV',
   access_token_secret: '4fJYsMv2Xk59cxHzHjGaG7WOKLqyU4Earh6FNXlWI3Nyy'
 });
-
 var index = require('./routes/index');
 var users = require('./routes/users');
-
 var today = new Date();
 var lastWeek = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
-
 var app = express();
 
 // view engine setup
@@ -43,16 +42,49 @@ app.post('/postFile', function(req, res){
   var player = req.body.player;
   var team = req.body.team;
   var author = req.body.author;
-
-  /*
-  client.get('search/tweets', { q: player+' '+team+' since:2011-11-11', count: 10 },
+  var tweetData = [];
+// LINE BREAKER
+//search count limited to small amount for testing, MAKE IT TO 300 WHEN SUBMIT!!
+  client.get('search/tweets', { q: player+' '+team+' since:2011-11-11', count: 7  },
   function(err, data, response) {
     for (var indx in data.statuses) {
     var tweet= data.statuses[indx];
-    console.log('on: ' + tweet.created_at + ' : @' + tweet.user.screen_name + ' : ' + tweet.text+'\n\n');
+    var screenName = tweet.user.screen_name;
+    var tweetText = tweet.text;
+    var dateTime = tweet.created_at;
+    var authorID = tweet.user.id;
+    var tweetID = tweet.id;
+    tweetData.push([screenName, tweetText, dateTime, authorID, tweetID]);
+    
+ /* console.log(tweetID + ' ' + author);
+    console.log(tweetText);*/
+    
+    
+    //  https://twitter.com/intent/user?user_id=USER_ID 
+    // https://twitter.com/anyuser/status/TWEETID
+    
+    //console.log('on: ' + tweet.created_at + ' : @' + tweet.user.screen_name + ' : ' + tweet.text+'\n\n');
+    //hide from flooding console  
     }
+    /* CODE WITH PROBLEM BELOW
+      router.get('/output',function (req, res){
+      res.render('/output', {title: 'tweetData', tweetData: json.stringify(tweetData)});
+    });
+    */
+    // test code
+      app.get("/output", function (req,res){
+        res.render("/output",{title: "tweetData", tweetData: tweetData});
+      });
+    //
+    // LINEBREAKER
+    console.log(typeof tweetData);
+    
+    
   });
-  */
+
+  
+
+// LINE BREAKER 
   var lastWeekYYYYMMDD = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + lastWeek.getDate();
   var lastWeekCount = new Array(7).fill(0);
   var lastWeekDates = new Array(7).fill(0);

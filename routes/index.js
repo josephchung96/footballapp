@@ -15,7 +15,10 @@ router.get('/trends', function(req, res, next){
   }else{
     res.render('trends', { title: 'Trends', lwCount: lastWeekCount, lwDate: lastWeekDates });
   }
-})
+});
+router.get('/output', function(req, res, next) {
+  res.render('output', { title: 'Output'});
+});
 router.post('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });

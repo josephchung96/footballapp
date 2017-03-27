@@ -66,18 +66,17 @@ app.post('/postFile', function(req, res){
     //console.log('on: ' + tweet.created_at + ' : @' + tweet.user.screen_name + ' : ' + tweet.text+'\n\n');
     //hide from flooding console  
     }
-    /* CODE WITH PROBLEM BELOW
+    // CODE WITH PROBLEM BELOW
       router.get('/output',function (req, res){
-      res.render('/output', {title: 'tweetData', tweetData: json.stringify(tweetData)});
-    });
-    */
-    // test code
+      res.render('/output', {title: 'tweetData', tData: json.stringify(tweetData)});
+      });
+    
+    /* test code
       app.get("/output", function (req,res){
         res.render("/output",{title: "tweetData", tweetData: tweetData});
       });
-    //
+    */
     // LINEBREAKER
-    console.log(typeof tweetData);
     
     
   });

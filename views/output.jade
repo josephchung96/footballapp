@@ -19,8 +19,8 @@ block content
                   a(href='/output') Search
         div.inner.cover
           h1.cover-heading Search results:
-          script(type='text/javascript').
-            var data = !{JSON.stringify(tweetData)};
+          each item in tData.tweetData
+            li= item
             
   
           

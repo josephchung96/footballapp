@@ -50,7 +50,7 @@ app.post('/postFile', function(req, res){
   var lastWeekCount = new Array(7).fill(0);
   var lastWeekDates = new Array(7).fill(0);
   var search = {};
-  var count = 1;
+  var count = 100;
   
 //query combination guards
   if (author==''){
@@ -58,7 +58,7 @@ app.post('/postFile', function(req, res){
   }else if (author!=player){
     var query = player+' '+team+' since:2011-11-11 -from:'+player+' from:'+author;
   }else{
-	var query = player+' '+team+' since:2011-11-11 from:'+author;
+    var query = player+' '+team+' since:2011-11-11 from:'+author;
   }
 
 //initialize last week dates
@@ -105,19 +105,27 @@ app.post('/postFile', function(req, res){
             if (createdAt>lastWeek){
               lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
             }
-			
-			var record = { 
-							tweetID: tweetID,
-							author: authorID,
-							screenname: screenName,
-							content: tweetText,
-							date: createdAt
-			}
-			console.log(record);
-			connection.query('INSERT INTO Tweet SET ?', record, function(err,res){
+            
+            var record = { 
+                            tweetID: tweetID,
+                            author: authorID,
+                            screenname: screenName,
+                            content: tweetText,
+                            date: createdAt
+            }
+            var keywords = { 
+                            player: player,
+                            team: team,
+                            author: author,
+                            tweetID: tweetID
+            }
+            connection.query('INSERT INTO Tweet SET ? ON DUPLICATE KEY UPDATE date = VALUES(date)', record, function(err,res){
               if(err) throw err;
             });
-			
+            connection.query('INSERT INTO Search SET ? ON DUPLICATE KEY UPDATE team = VALUES(team)', keywords, function(err,res){
+              if(err) throw err;
+            }); 
+            
           };
           if (data.statuses.length==count) {
             search = {};
@@ -126,12 +134,13 @@ app.post('/postFile', function(req, res){
             if (totalCount>0) {
               searchLimit(query, count, totalCount);
             }else{
-			}
+            }
           }
         }
     });
   }
-  searchLimit(query, count, 3);
+  
+  searchLimit(query, count, 300);
 
 // STREAMING API
     var stream = client.stream('statuses/filter', { track: player+' '+team })
@@ -150,6 +159,27 @@ app.post('/postFile', function(req, res){
       if (createdAt>lastWeek){
         lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
       }
+    
+      var record = { 
+                    tweetID: tweetID,
+                    author: authorID,
+                    screenname: screenName,
+                    content: tweetText,
+                    date: createdAt
+      }
+      var keywords = { 
+                    player: player,
+                    team: team,
+                    author: author,
+                    tweetID: tweetID
+      }
+      console.log(record);
+      connection.query('INSERT INTO Tweet SET ? ON DUPLICATE KEY UPDATE date = VALUES(date)', record, function(err,res){
+        if(err) throw err;
+      });
+      connection.query('INSERT INTO Search SET ? ON DUPLICATE KEY UPDATE team = VALUES(team)', keywords, function(err,res){
+        if(err) throw err;
+      }); 
     })
     
 // passing variables to route

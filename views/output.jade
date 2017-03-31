@@ -19,9 +19,36 @@ block content
                   a(href='/output') Search
         div.inner.cover
           h1.cover-heading Search results:
-          each item in tData.tweetData
-            li= item
-            
-  
-          
-          
+            if data
+              table.search-results
+                thead
+                  tr
+                    th.author Author
+                    th.tweet Tweet
+                    th
+                    th.date Date
+                tbody
+                  each val in data.tData
+                    tr
+                      td.author
+                        a(href='https://twitter.com/#{val[1]}')
+                          | #{val[0]}
+                        br
+                        a.screenname(href='https://twitter.com/#{val[1]}')
+                          | @#{val[1]}
+                      td.tweet
+                        |  #{val[2]}
+                      td
+                        a.tweeturl(href='https://twitter.com/id/status/#{val[5]}')
+                          | #[span.fa.fa-external-link]
+                      td.date= val[3]
+            else
+              p.lead Try search for something
+        div.mastfoot
+          div.inner
+            include footer
+
+block script
+  if data
+    script(src='/js/output.js')
+    script(src='/js/jquery.dataTables.min.js')

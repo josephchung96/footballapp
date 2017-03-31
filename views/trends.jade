@@ -20,22 +20,30 @@ block content
 
         div.inner.cover
           h1.cover-heading Trends
-            if lwCount && lwDates
-              table
-                thead
-                  tr
-                    th Date
-                    th Frequency
-                tbody
-                  each val, i in lastWeekCount
-                    tr
-                      td= i
-                      td= val
+            //if data
+            //  table
+            //    thead
+            //      tr
+            //        th Date
+            //        th Frequency
+            //    tbody
+            //      each count, i in data.lwCount
+            //        tr
+            //          td= data.lwDate[i]
+            //          td= count
+            p
+            if data
+              canvas#myChart(width='400', height='400')
+            else
+              p.lead Try search for something
         div.mastfoot
           div.inner
-            canvas#myChart(width='400', height='400')
-            script.
-              var getChart = document.getElementById("myChart");
+            include footer
 
 block script
-  script(src='/js/trends.js')
+  script(src='/js/chart.js')
+  if data
+    script.
+      var lwCount =!{JSON.stringify(data.lwCount)};
+      var lwDate =!{JSON.stringify(data.lwDate)};
+    script(src='/js/trends.js')

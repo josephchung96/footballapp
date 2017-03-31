@@ -111,7 +111,7 @@ body {
  */
 
 .cover {
-  padding: 0 20px;
+  padding: 100px 20px;
 }
 .btn.option:hover{
   color: #333;
@@ -148,6 +148,55 @@ body {
 .search input[type=text]:focus {
   width: 50%;
 }
+
+#myChart {
+  padding: 20px;
+  border: 2px solid #630015;
+  background-color: rgba(255,255,255,.9);
+}
+
+.search-results {
+  font-size: 18px;
+  text-align: left;
+}
+.search-results a:hover,
+.search-results a:focus{
+   text-decoration: none;
+}
+.search-results th,
+.search-results td{
+  padding: 10px;
+}
+.search-results th:focus{
+  outline: none;
+  text-decoration: none; 
+}
+.search-results .author{
+  width: 20%;
+}
+.search-results .author .screenname{
+  color: #691727;
+}
+.search-results .tweet{
+  width: 60%;
+}
+.search-results .date{
+  width: 20%;
+}
+.dataTables_paginate a:hover,
+.dataTables_paginate a:focus{
+  outline: none;
+  text-decoration: none; 
+}
+.paginate_button{
+  color: #efb7c2;
+  font-size: 24px;
+  padding: 10px;
+}
+.paginate_button.current{
+  color: #fff;
+}
+
 
 /*
  * Footer
@@ -189,6 +238,6 @@ body {
   .masthead,
   .mastfoot,
   .cover-container {
-  width: 700px;
+  width: 80%;
   }
 }

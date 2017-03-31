@@ -16,7 +16,6 @@ var client = new Twit({
   access_token_secret: '4fJYsMv2Xk59cxHzHjGaG7WOKLqyU4Earh6FNXlWI3Nyy'
 });
 var index = require('./routes/index');
-var users = require('./routes/users');
 var today = new Date();
 var lastWeek = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
 var app = express();
@@ -34,77 +33,80 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
 app.post('/postFile', function(req, res){
-  //console.log(JSON.stringify(req.body));
-
 
   var player = req.body.player;
   var team = req.body.team;
   var author = req.body.author;
   var tweetData = [];
-// LINE BREAKER
-//search count limited to small amount for testing, MAKE IT TO 300 WHEN SUBMIT!!
-  client.get('search/tweets', { q: player+' '+team+' since:2011-11-11', count: 7  },
-  function(err, data, response) {
-    for (var indx in data.statuses) {
-    var tweet= data.statuses[indx];
-    var screenName = tweet.user.screen_name;
-    var tweetText = tweet.text;
-    var dateTime = tweet.created_at;
-    var authorID = tweet.user.id;
-    var tweetID = tweet.id;
-    tweetData.push([screenName, tweetText, dateTime, authorID, tweetID]);
-    
- /* console.log(tweetID + ' ' + author);
-    console.log(tweetText);*/
-    
-    
-    //  https://twitter.com/intent/user?user_id=USER_ID 
-    // https://twitter.com/anyuser/status/TWEETID
-    
-    //console.log('on: ' + tweet.created_at + ' : @' + tweet.user.screen_name + ' : ' + tweet.text+'\n\n');
-    //hide from flooding console  
-    }
-    // CODE WITH PROBLEM BELOW
-      router.get('/output',function (req, res){
-      res.render('/output', {title: 'tweetData', tData: json.stringify(tweetData)});
-      });
-    
-    /* test code
-      app.get("/output", function (req,res){
-        res.render("/output",{title: "tweetData", tweetData: tweetData});
-      });
-    */
-    // LINEBREAKER
-    
-    
-  });
-
-  
-
-// LINE BREAKER 
-  var lastWeekYYYYMMDD = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + lastWeek.getDate();
   var lastWeekCount = new Array(7).fill(0);
   var lastWeekDates = new Array(7).fill(0);
+  var search = {};
+  var query = player+' '+team+' since:2011-11-11';
+  var count = 10;
+  
+// REST API
+  function searchLimit(query, count, totalCount){
+    search.q = query;
+    search.count = count;
+    console.log(search)
+    client.get('search/tweets', search ,
+      function(err, data, response) {
+        for (var indx in data.statuses) {
+          var tweet= data.statuses[indx];
+          var username= tweet.user.name;
+          var screenName = tweet.user.screen_name;
+          var tweetText = tweet.text;
+          var dateTime = new Date(tweet.created_at).toLocaleString();
+          var authorID = tweet.user.id_str;
+          var tweetID = tweet.id_str;        
+          var createdAt = new Date(tweet.created_at);
+          
+          tweetData.push([username, screenName, tweetText, dateTime, authorID, tweetID]);
+          
+          if (createdAt>lastWeek){
+            lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
+          }
+        };
+        console.log(data.statuses.length)
+        if (data.statuses.length==count) {
+          search = {};
+          search.max_id = data.statuses[ data.statuses.length - 1 ].id_str-1; 
+          totalCount -= count;
+          if (totalCount>0) {
+            searchLimit(query, count, totalCount);
+          }
+        }
+    });
+  }
+  
+  searchLimit(query, count, 30);
+  
+  for (day=0;day<lastWeekCount.length;day++) {
+    lastWeekDates[day] = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + (lastWeek.getDate()+day);
+  } 
 
-  var query = { q: player + ' to ' + team + 'since:' + lastWeekYYYYMMDD, count: 100 }
+// STREAMING API
+    var stream = client.stream('statuses/filter', { track: player+' '+team })
 
-  client.get('search/tweets', query, function(err, data, response) {
-  	for (var indx in data.statuses) {
-      var tweet= data.statuses[indx];
-  	  var createdAt = new Date(Date.parse(tweet.created_at));
-  	  lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
-    }
-
-    console.log('Player: ' + player + ' & Team: ' + team);
-  	for (day=0;day<lastWeekCount.length;day++) {
-      lastWeekDates[day] = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + (lastWeek.getDate()+day);
-      console.log(lastWeekDates[day] + ": " + lastWeekCount[day]);
-    }
-  });
-
+    stream.on('tweet', function (tweet) {
+      var username= tweet.user.name;
+      var screenName = tweet.user.screen_name;
+      var tweetText = tweet.text;
+      var dateTime = new Date(tweet.created_at).toLocaleString();
+      var authorID = tweet.user.id_str;
+      var tweetID = tweet.id_str;        
+      var createdAt = new Date(tweet.created_at);
+          
+      tweetData.push([username, screenName, tweetText, dateTime, authorID, tweetID]);
+      
+      if (createdAt>lastWeek){
+        lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
+      }
+    })
+  app.set('tweetData',tweetData);
   app.set('lastWeekCount',lastWeekCount);
+  app.set('lastWeekDates',lastWeekDates);
   res.send(req.body);
 });
 

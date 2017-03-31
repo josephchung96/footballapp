@@ -7,7 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var Twit = require('twit');
-var Promise = require("bluebird");
+//var Promise = require("bluebird");
 var http = require('http');
 var client = new Twit({
   consumer_key: '5Sqzd11fpZ94Z33NtlXjU4b2W',
@@ -42,49 +42,59 @@ app.post('/postFile', function(req, res){
   var lastWeekCount = new Array(7).fill(0);
   var lastWeekDates = new Array(7).fill(0);
   var search = {};
-  var query = player+' '+team+' since:2011-11-11';
   var count = 10;
+  
+//query combination guards
+  if (author==''){
+    var query = player+' '+team+' since:2011-11-11 -from:'+player;
+  }else if (author!=player){
+    var query = player+' '+team+' since:2011-11-11 -from:'+player+' from:'+author;
+  }else{
+	var query = player+' '+team+' since:2011-11-11 from:'+author;
+  }
+
+//initialize last week dates
+  for (day=0;day<lastWeekCount.length;day++) {
+    lastWeekDates[day] = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + (lastWeek.getDate()+day);
+  } 
   
 // REST API
   function searchLimit(query, count, totalCount){
     search.q = query;
     search.count = count;
-    console.log(search)
     client.get('search/tweets', search ,
       function(err, data, response) {
-        for (var indx in data.statuses) {
-          var tweet= data.statuses[indx];
-          var username= tweet.user.name;
-          var screenName = tweet.user.screen_name;
-          var tweetText = tweet.text;
-          var dateTime = new Date(tweet.created_at).toLocaleString();
-          var authorID = tweet.user.id_str;
-          var tweetID = tweet.id_str;        
-          var createdAt = new Date(tweet.created_at);
-          
-          tweetData.push([username, screenName, tweetText, dateTime, authorID, tweetID]);
-          
-          if (createdAt>lastWeek){
-            lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
-          }
-        };
-        console.log(data.statuses.length)
-        if (data.statuses.length==count) {
-          search = {};
-          search.max_id = data.statuses[ data.statuses.length - 1 ].id_str-1; 
-          totalCount -= count;
-          if (totalCount>0) {
-            searchLimit(query, count, totalCount);
+		console.log(err);
+        if (data) {
+          for (var indx in data.statuses) {
+            var tweet= data.statuses[indx];
+            var username= tweet.user.name;
+            var screenName = tweet.user.screen_name;
+            var tweetText = tweet.text;
+            var dateTime = new Date(tweet.created_at).toLocaleString();
+            var authorID = tweet.user.id_str;
+            var tweetID = tweet.id_str;        
+            var createdAt = new Date(tweet.created_at);
+            
+            tweetData.push([username, screenName, tweetText, dateTime, authorID, tweetID]);
+            
+            if (createdAt>lastWeek){
+              lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
+            }
+          };
+          if (data.statuses.length==count) {
+            search = {};
+            search.max_id = data.statuses[ data.statuses.length - 1 ].id_str-1; 
+            totalCount -= count;
+            if (totalCount>0) {
+              searchLimit(query, count, totalCount);
+            }
           }
         }
     });
   }
   
   searchLimit(query, count, 30);
-  
-  for (day=0;day<lastWeekCount.length;day++) {
-    lastWeekDates[day] = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + (lastWeek.getDate()+day);
-  } 
 
 // STREAMING API
     var stream = client.stream('statuses/filter', { track: player+' '+team })
@@ -104,6 +114,8 @@ app.post('/postFile', function(req, res){
         lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
       }
     })
+    
+// passing variables to route
   app.set('tweetData',tweetData);
   app.set('lastWeekCount',lastWeekCount);
   app.set('lastWeekDates',lastWeekDates);

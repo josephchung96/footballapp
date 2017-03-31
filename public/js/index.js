@@ -5,10 +5,19 @@ function toggleSearch(id) {
 }
 
 function validateForm() {
+    var player = document.getElementById('search')['player'].value;
     var team = document.getElementById('search')['team'].value;
-    var init = team.charAt(0)
-	if (init!='@' && init!='') {
+    var author = document.getElementById('search')['author'].value;
+    var teamInit = team.charAt(0);
+    var authorInit = author.charAt(0);
+	if (player=='' && team=='' && author=='') {
+		alert("Search field cannot be empty");
+        return false;
+	}else if (teamInit!='@' && teamInit!='') {
 		alert("Team name must be a Twitter handle");
+        return false;
+	}else if (authorInit!='@' && authorInit!='') {
+		alert("Author must be a Twitter handle");
         return false;
 	}else{
 		sendAjaxQuery('postFile', JSON.stringify($("#search").serializeObject()));

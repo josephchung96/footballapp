@@ -7,17 +7,24 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var Twit = require('twit');
-//var Promise = require("bluebird");
 var http = require('http');
+var mysql = require('mysql');
 var client = new Twit({
   consumer_key: '5Sqzd11fpZ94Z33NtlXjU4b2W',
   consumer_secret: 'PFsR1I1gtU0vwADTunZPzkgteOobvSLmCZQYhgnups3weHOUJy',
   access_token: '1860715854-o7iTu0wVqd9jSyyS4rLNsmjq6CJSKd7xvwsnoBV',
   access_token_secret: '4fJYsMv2Xk59cxHzHjGaG7WOKLqyU4Earh6FNXlWI3Nyy'
 });
+var connection = mysql.createConnection(
+    {
+      host     : 'stusql.dcs.shef.ac.uk',
+      port     : '3306',
+      user     : 'team062',
+      password : 'fa0ef08a',
+      database : 'team062'
+    }
+);
 var index = require('./routes/index');
-var today = new Date();
-var lastWeek = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
 var app = express();
 
 // view engine setup
@@ -34,7 +41,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.post('/postFile', function(req, res){
-
+  var today = new Date();
+  var lastWeek = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
   var player = req.body.player;
   var team = req.body.team;
   var author = req.body.author;
@@ -42,7 +50,7 @@ app.post('/postFile', function(req, res){
   var lastWeekCount = new Array(7).fill(0);
   var lastWeekDates = new Array(7).fill(0);
   var search = {};
-  var count = 10;
+  var count = 1;
   
 //query combination guards
   if (author==''){
@@ -58,13 +66,29 @@ app.post('/postFile', function(req, res){
     lastWeekDates[day] = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + (lastWeek.getDate()+day);
   } 
   
+//64bit int subtraction work around
+  function decStrNum (n) {
+    n = n.toString();
+    var result=n;
+    var i=n.length-1;
+    while (i>-1) {
+      if (n[i]==="0") {
+        result=result.substring(0,i)+"9"+result.substring(i+1);
+        i --;
+      }
+      else {
+        result=result.substring(0,i)+(parseInt(n[i],10)-1).toString()+result.substring(i+1);
+        return result;
+      }
+    }
+    return result;
+  }
 // REST API
   function searchLimit(query, count, totalCount){
     search.q = query;
     search.count = count;
     client.get('search/tweets', search ,
       function(err, data, response) {
-		console.log(err);
         if (data) {
           for (var indx in data.statuses) {
             var tweet= data.statuses[indx];
@@ -81,20 +105,33 @@ app.post('/postFile', function(req, res){
             if (createdAt>lastWeek){
               lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
             }
+			
+			var record = { 
+							tweetID: tweetID,
+							author: authorID,
+							screenname: screenName,
+							content: tweetText,
+							date: createdAt
+			}
+			console.log(record);
+			connection.query('INSERT INTO Tweet SET ?', record, function(err,res){
+              if(err) throw err;
+            });
+			
           };
           if (data.statuses.length==count) {
             search = {};
-            search.max_id = data.statuses[ data.statuses.length - 1 ].id_str-1; 
+            search.max_id = decStrNum(data.statuses[ data.statuses.length - 1 ].id_str); 
             totalCount -= count;
             if (totalCount>0) {
               searchLimit(query, count, totalCount);
-            }
+            }else{
+			}
           }
         }
     });
   }
-  
-  searchLimit(query, count, 30);
+  searchLimit(query, count, 3);
 
 // STREAMING API
     var stream = client.stream('statuses/filter', { track: player+' '+team })
@@ -119,7 +156,7 @@ app.post('/postFile', function(req, res){
   app.set('tweetData',tweetData);
   app.set('lastWeekCount',lastWeekCount);
   app.set('lastWeekDates',lastWeekDates);
-  res.send(req.body);
+  res.send(req.body);  
 });
 
 // catch 404 and forward to error handler

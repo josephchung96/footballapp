@@ -1,4 +1,5 @@
 function toggleSearch(id) {
+	id = id.split("-")[1];
 	var searchBar = document.getElementById(id);
 	$("input#"+id).toggleClass("hide");
 	$("input#"+id).val("");
@@ -6,7 +7,7 @@ function toggleSearch(id) {
 
 function validateForm() {
     var player = document.getElementById('search')['player'].value;
-    var team = document.getElementById('search')['team'].value;
+    var team = document.getElementById('search')['team-id'].value;
     var author = document.getElementById('search')['author'].value;
     var teamInit = team.charAt(0);
     var authorInit = author.charAt(0);
@@ -53,3 +54,43 @@ $.fn.serializeObject = function () {
 	});
 	return o;
 };
+
+  $( function() {
+    var team = [
+		{
+			value: "@ManUtd",
+			label: "Manchester United",
+			desc: "@ManUtd",
+			icon: "https://pbs.twimg.com/profile_images/828725640866172930/xihmUAVo_400x400.jpg"
+		},
+		{
+			value: "@ManCity",
+			label: "Manchester City",
+			desc: "@ManCity",
+			icon: "https://pbs.twimg.com/profile_images/803167098033864704/L89InOWr_400x400.jpg"
+		}
+	];
+ 
+    $( "#team" ).autocomplete({
+      minLength: 0,
+      source: team,
+      focus: function( event, ui ) {
+        $( "#team" ).val( ui.item.label );
+        return false;
+      },
+      select: function( event, ui ) {
+        $( "#team" ).val( ui.item.label );
+        $( "#team-id" ).val( ui.item.value );
+        $( "#team-description" ).html( ui.item.desc );
+        $( "#team-description" ).toggleClass("hide");
+        $( "#team" ).css( "background-image", 'url('+ui.item.icon+')' );
+ 
+        return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<div class='team-name'>" + item.label + "</div><div class='team-desc'>" + item.desc + "</div>" )
+        .appendTo( ul );
+    };
+  });

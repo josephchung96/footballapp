@@ -10,7 +10,7 @@ block content
             nav
               ul.nav.masthead-nav
                 li.active
-                  a(href='/index') Home
+                  a(href='/') Home
                 li
                   a(href='/trends') Trends
                 li
@@ -23,19 +23,21 @@ block content
           p.lead
           p.lead Gossip is more popular than literature
           p.lead 
-              button.btn.btn-lg.btn-default.option(id='option-player', onclick="toggleSearch(this.id)")
+              button.btn.btn-lg.btn-default.option(id='button-player', onclick="toggleSearch(this.id)")
                 |  #[span.fa.fa-user]
                 |  Player
-              button.btn.btn-lg.btn-default.option(id='option-team', onclick="toggleSearch(this.id)")
+              button.btn.btn-lg.btn-default.option(id='button-team', onclick="toggleSearch(this.id)")
                 |  #[span.fa.fa-users]
                 |  Team
-              button.btn.btn-lg.btn-default.option(id='option-author', onclick="toggleSearch(this.id)")
+              button.btn.btn-lg.btn-default.option(id='button-author', onclick="toggleSearch(this.id)")
                 |  #[span.fa.fa-pencil-square-o]
                 |  Author
           form.search(id='search', onsubmit='return validateForm()')
-            input.hide(id='option-player', type='text', name='player', placeholder='Player...')
-            input.hide(id='option-team', type='text', name='team', placeholder='Team...')
-            input.hide(id='option-author', type='text', name='author', placeholder='Author...')
+            input.hide(id='player', type='text', name='player', placeholder='Player...')
+            input.hide(id='team', type='text', placeholder='Team...')
+            span#team-description.hide
+            input(id='team-id', name='team', type='hidden')
+            input.hide(id='author', type='text', name='author', placeholder='Author...')
             input(type='submit' style='display: none')
         div.mastfoot
           div.inner

@@ -10,10 +10,10 @@ var Twit = require('twit');
 var http = require('http');
 var mysql = require('mysql');
 var client = new Twit({
-  consumer_key: '5Sqzd11fpZ94Z33NtlXjU4b2W',
-  consumer_secret: 'PFsR1I1gtU0vwADTunZPzkgteOobvSLmCZQYhgnups3weHOUJy',
-  access_token: '1860715854-o7iTu0wVqd9jSyyS4rLNsmjq6CJSKd7xvwsnoBV',
-  access_token_secret: '4fJYsMv2Xk59cxHzHjGaG7WOKLqyU4Earh6FNXlWI3Nyy'
+  consumer_key: 'rt5aAKOB34jd4R7TGOplVN47M',
+  consumer_secret: '5wFI0iGMsNtkUh866jyfFkhUSde1luYYNlcMa2xEzq4WbPpTh0',
+  access_token: '3028228828-ubtmS4CIs6x67SjY1uzp6ffKm7wiQXp1iRUsuGv',
+  access_token_secret: 'MsqfWOYoGGstvOkU5uJmolGGSenqNX3mx8uSKUENyZHgJ'
 });
 var connection = mysql.createConnection(
     {

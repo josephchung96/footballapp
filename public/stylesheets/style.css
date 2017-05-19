@@ -131,12 +131,12 @@ body {
 }
 .search {
   color: #000;
+  font-size: 16px;
 }
 .search input[type=text] {
   width: 25%;
   box-sizing: border-box;
-  border: 2px solid #ccc;
-  font-size: 16px;
+  border: 3px solid #333;
   background-color: #fff;
   background-size: 25px;
   background-image: url('/images/searchicon.png');
@@ -149,6 +149,28 @@ body {
 .search input[type=text]:focus {
   width: 30%;
 }
+.search input[type=text].optional {
+  border: 3px solid #ccc;
+}
+.search input#playerToTeam,
+.search input#authorToPlayer, 
+.search input#teamToAuthor,
+.search input[type=submit] {
+  background: #ccc;
+  border: 3px solid #333;
+  cursor:pointer;
+  text-align: center;
+  padding: 12px 0px;
+}
+.search input#playerToTeam,
+.search input#authorToPlayer,
+.search input#teamToAuthor {
+  width: 50px;;
+}
+.search input[type=submit] {
+  width: 75px;
+}
+
 
 #team-description {
   box-sizing: border-box;

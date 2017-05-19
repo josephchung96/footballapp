@@ -1,16 +1,83 @@
 function toggleSearch(id) {
 	id = id.split("-")[1];
 	var searchBar = document.getElementById(id);
+	
+	if (!$("input#"+id).hasClass("hide")) {
+		$("input#"+id).val("");
+	}
 	$("input#"+id).toggleClass("hide");
-	$("input#"+id).val("");
+	
+	if ($("input#submit").hasClass("hide")) {
+		$("input#submit").toggleClass("hide");
+	} else if ($("input#player").hasClass("hide") && $("input#team").hasClass("hide") && $("input#author").hasClass("hide")) {
+		$("input#submit").toggleClass("hide");
+	}
+	
+	if (id!="author") {
+		if (!$("input#player").hasClass("hide") && !$("input#team").hasClass("hide")) {
+			$("input#playerToTeam").toggleClass("hide");
+			$("input#playerToTeam").val('and');
+		} else if (!$("input#playerToTeam").hasClass("hide")) {
+			$("input#playerToTeam").val('');
+			$("input#playerToTeam").toggleClass("hide");
+		}
+	}
+	
+	if (id!="team") {
+		if (!$("input#player").hasClass("hide") && !$("input#author").hasClass("hide") && $("input#playerToTeam").hasClass("hide")) {
+			$("input#authorToPlayer").toggleClass("hide");
+			$("input#authorToPlayer").val('and');
+		} else if (!$("input#authorToPlayer").hasClass("hide")) {
+			$("input#authorToPlayer").val('');
+			$("input#authorToPlayer").toggleClass("hide");
+		}
+	} else if (!$("input#authorToPlayer").hasClass("hide")) {
+		$("input#authorToPlayer").val('');
+		$("input#authorToPlayer").toggleClass("hide");
+	} else if (!$("input#player").hasClass("hide") && !$("input#author").hasClass("hide")) {
+		$("input#authorToPlayer").val('and');
+		$("input#authorToPlayer").toggleClass("hide");
+	}
+	
+	if (id!="player") {
+		if (!$("input#team").hasClass("hide") && !$("input#author").hasClass("hide")) {
+			$("input#teamToAuthor").toggleClass("hide");
+			$("input#teamToAuthor").val('and');
+		} else if (!$("input#teamToAuthor").hasClass("hide")) {
+			$("input#teamToAuthor").val('');
+			$("input#teamToAuthor").toggleClass("hide");
+		}
+	}
+	
+	
+}
+
+function toggleOperand(id) {
+	var button = document.getElementById(id);
+	if (button.value=='and') {
+		button.value ='or';
+	} else {
+		button.value ='and';
+	}
 }
 
 function validateForm() {
-    var player = document.getElementById('search')['player'].value;
-    var team = document.getElementById('search')['team-id'].value;
-    var author = document.getElementById('search')['author'].value;
-    var teamInit = team.charAt(0);
-    var authorInit = author.charAt(0);
+    var player;
+    var team;
+    var author;
+		
+    var teamInit;
+    var authorInit;
+	
+	
+    player = document.getElementById('search')['player'].value;
+    team = document.getElementById('search')['team'].value;
+    author = document.getElementById('search')['author'].value;	
+	
+    teamInit = team.charAt(0);
+    authorInit = author.charAt(0);
+	
+	console.log (JSON.stringify($("#search").serializeObject()));
 	if (player=='' && team=='' && author=='') {
 		alert("Search field cannot be empty");
         return false;
@@ -54,43 +121,3 @@ $.fn.serializeObject = function () {
 	});
 	return o;
 };
-
-  $( function() {
-    var team = [
-		{
-			value: "@ManUtd",
-			label: "Manchester United",
-			desc: "@ManUtd",
-			icon: "https://pbs.twimg.com/profile_images/828725640866172930/xihmUAVo_400x400.jpg"
-		},
-		{
-			value: "@ManCity",
-			label: "Manchester City",
-			desc: "@ManCity",
-			icon: "https://pbs.twimg.com/profile_images/803167098033864704/L89InOWr_400x400.jpg"
-		}
-	];
- 
-    $( "#team" ).autocomplete({
-      minLength: 0,
-      source: team,
-      focus: function( event, ui ) {
-        $( "#team" ).val( ui.item.label );
-        return false;
-      },
-      select: function( event, ui ) {
-        $( "#team" ).val( ui.item.label );
-        $( "#team-id" ).val( ui.item.value );
-        $( "#team-description" ).html( ui.item.desc );
-        $( "#team-description" ).toggleClass("hide");
-        $( "#team" ).css( "background-image", 'url('+ui.item.icon+')' );
- 
-        return false;
-      }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      return $( "<li>" )
-        .append( "<div class='team-name'>" + item.label + "</div><div class='team-desc'>" + item.desc + "</div>" )
-        .appendTo( ul );
-    };
-  });

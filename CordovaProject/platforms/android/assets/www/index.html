@@ -28,7 +28,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"/>
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -36,44 +36,46 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <title>Footballapp</title>
     </head>
-    <body>
+    <body onload="app.initialize()">
         <div class="app">
-            <h1>Football Gossip</h1>
-            <h3>Gossip is more popular than literature</h3>
-            <form class="search" id="search" onsubmit="return validateForm()">
+            <div id="home_page" style="display:block;">
+                <h1>Football Gossip</h1>
+                <h3>Gossip is more popular than literature</h3>
                 Search by:<br>
-                <select class="search-form" id="search-option" onchange="searchForm(this.value)">
-                    <option value="" disabled selected>Select search option</option>
-                    <option value="p">Player</option>
-                    <option value="t">Team</option>
-                    <option value="a">Author</option>
-                    <option value="pt">Player & Team</option>
-                    <option value="pa">Player & Author</option>
-                    <option value="ta">Team & Author</option>
-                    <option value="pta">Player & Team & Author</option>
-                    <option value="tp">Player/Team</option>
-                    <option value="at">Team/Author</option>
-                    <option value="ap">Player/Author</option>
-                    <option value="atp">Player/Team/Author</option>
-                </select>
-                <div id="search-boxes" style="display:none;">
-                    <div class="search-form" id="player-search" style="display:none;">
+                <div id="search-buttons" class="form-layout">
+                    <button class="btn btn-large btn-default" id="btnPlayer" name="btnPlayer"><i class="fa fa-user"></i>Player</button>
+                    <button class="btn btn-large btn-default" id="btnTeam" name="btnTeam"><i class="fa fa-users"></i>Team</button>
+                    <button class="btn btn-large btn-default" id="btnAuthor" name="btnAuthor"><i class="fa fa-pencil-square-o"></i>Author</button>
+                </div>
+                <div id="search-boxes">
+                    <div class="form-layout" id="player-search">
                         <input type="text" id="player" name="player" placeholder="Search for player">
                     </div>
-                    <div class="search-form" id="team-search" style="display:none;">
+                    <div>
+                        <button class="btn btn-default" id="btnAndOr1" name="btnAndOr1" onclick="toggleBtn(this.id)">and</button>
+                    </div>
+                    <div id="team-search">
                         <input type="text" id="team" name="team" placeholder="Search for team">
                     </div>
-                    <div class="search-form" id="author-search" style="display:none;">
+                    <div>
+                        <!-- <input type="button" class="btn btn-default" id="btnAndOr2" name="btnAndOr2" value="and"/> -->
+                        <button class="btn btn-default" id="btnAndOr2" name="btnAndOr2">and</button>
+                    </div>
+                    <div id="author-search">
                         <input type="text" id="author" name="author" placeholder="Search for author">
                     </div>
-                    <div id="button-search">
-                        <input type="submit" id="searchFor" name="searchFor" value="Search">
+                    <div id="button-search" class="form-layout">
+                        <button id="searchQuery">Search</button>
                     </div>
                 </div>
-            </form>
-            <p type="text" name="alertMessage" id="alertMessage"></p>
+                <p type="text" name="alertMessage" id="alertMessage"></p>
+            </div>
+            <div id="results_page" style="display:none;">
+
+            </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

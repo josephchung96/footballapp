@@ -33,16 +33,16 @@
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.mins.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
         <title>Footballapp</title>
     </head>
     <body onload="app.initialize()">
         <div class="app">
             <!-- home page-->
-            <div id="home_page" style="display:none;">
+            <div id="home_page" style="display:block;">
                 <h1>Football Gossip</h1>
-                <h3>Gossip is more popular than literature</h3>
+                <h4>Gossip is more popular than literature</h4>
                 Search by:<br>
                 <div id="search-buttons" class="form-layout">
                     <button class="btn btn-large btn-default" id="btnPlayer" name="btnPlayer"><i class="fa fa-user"></i>Player</button>
@@ -67,15 +67,21 @@
                         <input type="text" id="author" name="author" placeholder="Search for author">
                     </div>
                     <div id="searchQuery" class="form-layout">
-                        <button id="btnSearch">Search</button>
+                        <button id="btnSearch" class="btn btn-primary">Search</button>
                     </div>
                 </div>
                 <p type="text" name="alertMessage" id="alertMessage"></p>
             </div>
 
             <!-- results page -->
-            <div id="results_page" style="display:block;">
+            <div id="results_page" style="display:none;">
                 <a href="#home_page" class="btn btn-default fa fa-reply">Back</a>
+                <div id="search-results">
+                    Search results:
+                </div>
+                <div id="trend-results">
+                    Frequency:
+                </div>
             </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>

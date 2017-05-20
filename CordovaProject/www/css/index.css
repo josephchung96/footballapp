@@ -51,8 +51,15 @@ body {
     position:absolute;             /* position in the center of the screen */
     width:100%;
     height:100%;
-    text-align:center;
     background-size:cover;
+}
+
+.app #home_page {
+    text-align:center;
+}
+
+.app #results_page a {
+    padding: 20px 5px 0px 0px;
 }
 
 .app h1 {

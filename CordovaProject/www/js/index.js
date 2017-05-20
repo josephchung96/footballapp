@@ -51,6 +51,16 @@ var app = {
                 button.innerHTML='and';
             }
         });
+        $("btnSearch").on("click", function() {
+            var homePage = document.getElementById("home_page");
+            var resultsPage = document.getElementById("results_page");
+            var player = document.getElementById("player").value;
+            var team = document.getElementById("team").value;
+            var author = document.getElementById("author").value;
+            // TODO: validation function needed
+            resultsPage.style.display = "block";
+            homePage.style.display = "none";
+        });
 
     }
 };

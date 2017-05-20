@@ -33,16 +33,33 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
 
+        // toggle the first and/or button
+        $("#btnAndOr1").on("click", function() {
+            var button = document.getElementById("btnAndOr1");
+            if (button.innerHTML=='and') {
+                button.innerHTML='or';
+            } else {
+                button.innerHTML='and';
+            }
+        })
+        //toggle the second and/or button
         $("#btnAndOr2").on("click", function() {
             var button = document.getElementById("btnAndOr2");
             if (button.innerHTML=='and') {
-                alert("1");
                 button.innerHTML='or';
             } else {
-                alert("2");
                 button.innerHTML='and';
             }
-            alert("3");
+        });
+        $("btnSearch").on("click", function() {
+            var homePage = document.getElementById("home_page");
+            var resultsPage = document.getElementById("results_page");
+            var player = document.getElementById("player").value;
+            var team = document.getElementById("team").value;
+            var author = document.getElementById("author").value;
+            // TODO: validation function needed
+            resultsPage.style.display = "block";
+            homePage.style.display = "none";
         });
 
     }

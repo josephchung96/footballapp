@@ -1,12 +1,12 @@
 function toggleSearch(id) {
 	id = id.split("-")[1];
 	var searchBar = document.getElementById(id);
-	
+
 	if (!$("input#"+id).hasClass("hide")) {
 		$("input#"+id).val("");
 	}
 	$("input#"+id).toggleClass("hide");
-	
+
 	if ($("input#submit").hasClass("hide")) {
 		$("input#submit").toggleClass("hide");
 		$("label#searchOption").toggleClass("hide");
@@ -14,7 +14,7 @@ function toggleSearch(id) {
 		$("input#submit").toggleClass("hide");
 		$("label#searchOption").toggleClass("hide");
 	}
-	
+
 	if (id!="author") {
 		if (!$("input#player").hasClass("hide") && !$("input#team").hasClass("hide")) {
 			$("input#playerToTeam").toggleClass("hide");
@@ -24,7 +24,7 @@ function toggleSearch(id) {
 			$("input#playerToTeam").toggleClass("hide");
 		}
 	}
-	
+
 	if (id!="team") {
 		if (!$("input#player").hasClass("hide") && !$("input#author").hasClass("hide") && $("input#playerToTeam").hasClass("hide")) {
 			$("input#authorToPlayer").toggleClass("hide");
@@ -40,7 +40,7 @@ function toggleSearch(id) {
 		$("input#authorToPlayer").val('and');
 		$("input#authorToPlayer").toggleClass("hide");
 	}
-	
+
 	if (id!="player") {
 		if (!$("input#team").hasClass("hide") && !$("input#author").hasClass("hide")) {
 			$("input#teamToAuthor").toggleClass("hide");
@@ -50,8 +50,8 @@ function toggleSearch(id) {
 			$("input#teamToAuthor").toggleClass("hide");
 		}
 	}
-	
-	
+
+
 }
 
 function toggleOperand(id) {
@@ -76,7 +76,18 @@ function validateForm() {
     author = document.getElementById('search')['author'].value;	
 
     authorInit = author.charAt(0);
-	
+
+    var teamInit;
+    var authorInit;
+
+
+    player = document.getElementById('search')['player'].value;
+    team = document.getElementById('search')['team'].value;
+    author = document.getElementById('search')['author'].value;
+
+    teamInit = team.charAt(0);
+    authorInit = author.charAt(0);
+
 	if (player=='' && team=='' && author=='') {
 		alert("Search field cannot be empty");
         return false;
@@ -94,7 +105,7 @@ function sendAjaxQuery(url, data) {
 		url: url,
 		data: data,
 		contentType: 'application/json',
-		success: function (data) {	
+		success: function (data) {
 		},
 		error: function (xhr, status, error) {
 		}

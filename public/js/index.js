@@ -9,8 +9,10 @@ function toggleSearch(id) {
 	
 	if ($("input#submit").hasClass("hide")) {
 		$("input#submit").toggleClass("hide");
+		$("label#searchOption").toggleClass("hide");
 	} else if ($("input#player").hasClass("hide") && $("input#team").hasClass("hide") && $("input#author").hasClass("hide")) {
 		$("input#submit").toggleClass("hide");
+		$("label#searchOption").toggleClass("hide");
 	}
 	
 	if (id!="author") {
@@ -62,27 +64,21 @@ function toggleOperand(id) {
 }
 
 function validateForm() {
+	
     var player;
     var team;
     var author;
 		
-    var teamInit;
     var authorInit;
-	
 	
     player = document.getElementById('search')['player'].value;
     team = document.getElementById('search')['team'].value;
     author = document.getElementById('search')['author'].value;	
-	
-    teamInit = team.charAt(0);
+
     authorInit = author.charAt(0);
 	
-	console.log (JSON.stringify($("#search").serializeObject()));
 	if (player=='' && team=='' && author=='') {
 		alert("Search field cannot be empty");
-        return false;
-	}else if (teamInit!='@' && teamInit!='') {
-		alert("Team name must be a Twitter handle");
         return false;
 	}else if (authorInit!='@' && authorInit!='') {
 		alert("Author must be a Twitter handle");

@@ -39,6 +39,9 @@ block content
             input.hide(id='team', type='text', name='team', placeholder='Team...')
             input.hide(id='teamToAuthor', type='text', name='teamToAuthor', onclick='toggleOperand(this.id)' readonly)
             input.hide(id='author', type='text', name='author', placeholder='Author...')
+            label.hide(id='searchOption')
+              input(id='database', type='checkbox', name='database', value='true') 
+              |  Within Database
             input.hide(id='submit', type='submit' value='Search')
         div.mastfoot
           div.inner

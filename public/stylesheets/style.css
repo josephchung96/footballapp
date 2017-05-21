@@ -155,12 +155,14 @@ body {
 .search input#playerToTeam,
 .search input#authorToPlayer, 
 .search input#teamToAuthor,
+.search label#searchOption,
 .search input[type=submit] {
   background: #ccc;
   border: 3px solid #333;
   cursor:pointer;
   text-align: center;
-  padding: 12px 0px;
+  padding: 12px 2px;
+  margin: auto;
 }
 .search input#playerToTeam,
 .search input#authorToPlayer,
@@ -169,6 +171,14 @@ body {
 }
 .search input[type=submit] {
   width: 75px;
+  font-weight:700;
+}
+.search input#database{
+  margin:0px;
+}
+.search label#searchOption {
+  font-weight: 100;
+  text-shadow: none;
 }
 
 

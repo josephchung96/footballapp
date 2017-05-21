@@ -4,7 +4,7 @@ var myChart = new Chart(ctx, {
     data: {
         labels: lwDate,
         datasets: [{
-            label: 'Number of searches',
+            label: 'Number of tweets',
             data: lwCount,
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)',

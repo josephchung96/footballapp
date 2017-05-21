@@ -1,3 +1,84 @@
+var socket = io();
+ 
+socket.on('dbOnly', function(data){
+	var bar = document.getElementById("myBar");
+	var status = document.getElementById("status");
+
+	var width = 1;
+	var redirectDelay = 3000;
+	var progress;
+	
+	function frame() {
+		if (width >= progress) {
+			clearInterval(id);
+		} else {
+			width++; 
+			bar.style.width = width + '%'; 
+		}
+	}
+	
+	if (data.message=='error') {
+		progress = 100;
+		status.innerHTML = "Connection to database could not be established, redirecting...";
+		bar.style.backgroundColor = "#cc0000";
+		setTimeout(function() {
+		  window.location.href = '/'
+		}, redirectDelay);
+	}
+	if (data.message=='done') {
+		progress = 100;
+		status.innerHTML = "Data retrieved from database, redirecting...";
+		setTimeout(function() {
+		  window.location.href = '/output'
+		}, redirectDelay);
+	}
+	
+	
+	var id = setInterval(frame, 10);
+});
+
+socket.on('restAPI', function(data){
+	var bar = document.getElementById("myBar");
+	var status = document.getElementById("status");
+
+	var width;
+	var progress;
+	var redirectDelay = 3000;
+	
+	function frame() {
+		if (width >= progress) {
+			clearInterval(id);
+		} else {
+			width++; 
+			bar.style.width = width + '%'; 
+		}
+	}
+	
+	if (data.message=='dbError') {
+		width = 0;
+		progress = 33;
+		status.innerHTML = "...";
+		bar.style.backgroundColor = "#fbd744";
+		status.innerHTML = "Connection to database could not be established, tweets would not be saved.";
+	}
+	if (data.message=='dbSuccess') {
+		width = 0;
+		progress = 33;
+		status.innerHTML = "Connection to database established, tweets would be saved.";
+	}
+	if (data.message=='done') {
+		width = 33;
+		progress = 100;
+		status.innerHTML = "Data retrieved from Twitter, redirecting...";
+		setTimeout(function() {
+		  window.location.href = '/output'
+		}, redirectDelay);
+	}
+	
+	
+	var id = setInterval(frame, 10);
+});
+
 function toggleSearch(id) {
 	id = id.split("-")[1];
 	var searchBar = document.getElementById(id);

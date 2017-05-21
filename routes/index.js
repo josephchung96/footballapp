@@ -2,14 +2,19 @@ var express = require('express');
 var router = express.Router();
 var dbcon = require('../config/db.js');
 var client = require('../config/twitter.js');
+var socket_io = require('socket.io');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	res.render('index', { title: 'Football Gossip Application' });
-});
-
-router.post('/', function(req, res, next) {
-	res.render('index', { title: 'Football Gossip Application' });
+	if (!req.app.get('io')) {
+		var io = socket_io.listen(req.socket.server);
+		req.app.set('io',io);
+	}
+	if (!Object.keys(req.query).length) {
+		res.render('index', { title: 'Football Gossip Application' });
+	} else {
+		res.render('index', { title: 'Football Gossip Application', data : {'query' : req.query} });
+	}
 });
 
 router.post('/postFile', function(req, res){
@@ -34,6 +39,8 @@ router.post('/postFile', function(req, res){
 	var totalCount = 300;
 	
 	var tweetData = [];
+	
+	var io = req.app.get('io');
  
 //initialize last week dates
 	for (day=0;day<lastWeekCount.length;day++) {
@@ -99,9 +106,9 @@ router.post('/postFile', function(req, res){
 					search.max_id = decStrNum(data.statuses[ data.statuses.length - 1 ].id_str); 
 					totalCount -= count;
 					if (totalCount>0) {
-						console.log("done once");
 						searchTweets(query, count, totalCount, connection, dbErr);
 					}else{
+						io.emit('restAPI', { message: 'done' });
 					}
 				}
 			}
@@ -149,10 +156,13 @@ router.post('/postFile', function(req, res){
 		}
 	}	
 
+//search
 	dbcon.connectdb(function(dbErr, connection){
+
 		if (database) {
-	
+			
 			var sqlQuery = 'SELECT * FROM Tweet ';
+			
 			if (player) {
 				sqlQuery = sqlQuery + "WHERE (content LIKE '%"+player+"%'";
 				if (team) {
@@ -191,67 +201,83 @@ router.post('/postFile', function(req, res){
 							lastWeekCount[res[tweet].date.getDate()-lastWeek.getDate()] += 1;
 						}
 					}
+					setTimeout(function() {
+						io.emit('dbOnly', { message: 'done' });
+					}, 500);
 				});
+			} else {
+				io.emit('dbOnly', { message: 'error' });
 			}
 		} else {
+			
 		// REST API
+			if (!dbErr){
+				setTimeout(function() {
+					io.emit('restAPI', { message: 'dbSuccess' });
+				}, 500);
+			} else {
+				io.emit('restAPI', { message: 'dbError' });
+			}
+
 			searchTweets(query, count, totalCount, connection, dbErr);
 
 		// STREAMING API
-			client.get('users/show', {screen_name: author.substring(1)} , function(err, data, response) {
-				if (data.id) {
-					var authorID = data.id;
-					
-					var stream = client.stream('statuses/filter', { track: tracks, follow: authorID })
+			var userID;
+			var stream;
+			
+			if (author) {
+				client.get('users/show', {screen_name: author.substring(1)} , function(err, data, response) {
+					if (data.id) {
+						userID = data.id;
+					}
+					stream = client.stream('statuses/filter', { track: tracks, follow: userID });
+				});
+				
+			} else {
+				stream = client.stream('statuses/filter', { track: tracks });
+			}
 
-					stream.on('tweet', function (tweet) {
-						var username= tweet.user.name;
-						var screenName = tweet.user.screen_name;
-						var tweetText = tweet.text;
-						var createdAt = new Date(tweet.created_at);
-						var authorID = tweet.user.id_str;
-						var tweetID = tweet.id_str;				
-						
-						var valid = true;
-						
-						if ((teamToAuthor=='and' || authorToPlayer=='and')) {
-							if (screenName!=author) {
-							valid = false;
-							}
-						}
-						
-						// AND author
-						if (valid) {
-							tweetData.push([username, screenName, tweetText, createdAt.toLocaleString(), authorID, tweetID]);
-						
-							if (createdAt>lastWeek){
-								lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
-							}
-
-							var record = {
-								username: username,
-								screenname: screenName,
-								content: tweetText,
-								date: createdAt,
-								authorID: authorID,
-								tweetID: tweetID,
-							}
-							// streaming debug
-							console.log(record);
-							if (!dbErr) {
-								connection.query('INSERT INTO Tweet SET ? ON DUPLICATE KEY UPDATE date = VALUES(date)', record, function(err,res){
-									if(err) throw err;
-								});
-							}
-						}
-					})
-					
+			stream.on('tweet', function (tweet) {
+				var username= tweet.user.name;
+				var screenName = tweet.user.screen_name;
+				var tweetText = tweet.text;
+				var createdAt = new Date(tweet.created_at);
+				var authorID = tweet.user.id_str;
+				var tweetID = tweet.id_str;				
+				
+				var valid = true;
+				
+				if ((teamToAuthor=='and' || authorToPlayer=='and')) {
+					if (screenName!=author) {
+					valid = false;
+					}
 				}
-			});
+				
+				// AND author
+				if (valid) {
+					tweetData.push([username, screenName, tweetText, createdAt.toLocaleString(), authorID, tweetID]);
+				
+					if (createdAt>lastWeek){
+						lastWeekCount[createdAt.getDate()-lastWeek.getDate()] += 1;
+					}
+
+					var record = {
+						username: username,
+						screenname: screenName,
+						content: tweetText,
+						date: createdAt,
+						authorID: authorID,
+						tweetID: tweetID,
+					}
+					if (!dbErr) {
+						connection.query('INSERT INTO Tweet SET ? ON DUPLICATE KEY UPDATE date = VALUES(date)', record, function(err,res){
+							if(err) throw err;
+						});
+					}
+				}
+			})
 		}
     });
-//search
-
 	
 // passing variables to route
 	req.app.set('tweetData',tweetData);

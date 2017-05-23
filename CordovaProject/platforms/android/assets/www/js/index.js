@@ -41,46 +41,15 @@ var app = {
         $("#btnAuthor").on( 'click', toggleSearch);
 
         // toggle the first and/or button
-        $("input#playerToTeam").on("click", function() {
-            var button = document.getElementById("playerToTeam");
-            if (button.value=='and') {
-                button.value='or';
-            } else {
-                button.value='and';
-            }
-        })
-        //toggle the second and/or button
-        $("input#authorToPlayer").on("click", function() {
-            var button = document.getElementById("authorToPlayer");
-            if (button.value=='and') {
-                button.value='or';
-            } else {
-                button.value='and';
-            }
-        })
-        //toggle the third and/or button
-        $("input#teamToAuthor").on("click", function() {
-            var button = document.getElementById("teamToAuthor");
-            if (button.value=='and') {
-                button.value='or';
-            } else {
-                button.value='and';
-            }
-        })
+        $("#playerToTeam").on( 'click', toggleOperand);
 
-        //document.getElementById("btnSearch").addEventListener("click", validateForm);
+        //toggle the second and/or button
+        $("#authorToPlayer").on( 'click', toggleOperand);
+
+        //toggle the third and/or button
+        $("#teamToAuthor").on( 'click', toggleOperand);
+
         $("#submit").on("click", validateForm);
-//        document.getElementById("btnSearch").addEventListener("click", sendAjaxQuery('postFile', JSON.stringify($("#search-form").serializeObject()));
-//        $("btnSearch").on("click", function() {
-//            var homePage = document.getElementById("home_page");
-//            var resultsPage = document.getElementById("results_page");
-//            var player = document.getElementById("player").value;
-//            var team = document.getElementById("team").value;
-//            var author = document.getElementById("author").value;
-//            // TODO: validation function needed
-//            resultsPage.style.display = "block";
-//            homePage.style.display = "none";
-//        });
 
     }
 };
@@ -139,6 +108,16 @@ function toggleSearch() {
     }
 }
 
+function toggleOperand() {
+    var id = this.id;
+	var button = document.getElementById(id);
+	if (button.value=='and') {
+		button.value ='or';
+	} else {
+		button.value ='and';
+	}
+}
+
 function validateForm() {
 
     var player;
@@ -155,13 +134,12 @@ function validateForm() {
 
     if (player=='' && team=='' && author=='') {
         alert("Search field cannot be empty");
-        return false;
     }else if (authorInit!='@' && authorInit!='') {
         alert("Author must be a Twitter handle");
-        return false;
     }else{
         sendAjaxQuery('http://10.0.2.2:3000/postFile', JSON.stringify($("#search-form").serializeObject()));
     }
+     return false;
 }
 
 function sendAjaxQuery(url, data) {
@@ -171,12 +149,10 @@ function sendAjaxQuery(url, data) {
         data: data,
         contentType: 'application/json',
         success: function (data) {
-            if (!$("#home_page").hasClass("hide")) {
-                $("#home_page").toggleClass("hide");
-                if ($("#loading_bar").hasClass("hide")) {
-                    $("#loading_bar").toggleClass("hide");
-                }
-            }
+            $("#home_page").toggleClass("hide");
+            $("#loading_bar").toggleClass("hide");
+            var socket = io.connect('http://10.0.2.2:3000');
+            updateLoading(socket);
         },
         error: function (xhr, status, error) {
         }
@@ -198,6 +174,123 @@ $.fn.serializeObject = function () {
     });
     return o;
 };
+
+function updateLoading(socket) {
+    socket.on('dbOnly', function(data){
+		var bar = document.getElementById("myBar");
+		var status = document.getElementById("status");
+
+		var width = 1;
+		var redirectDelay = 3000;
+		var progress;
+
+		function frame() {
+			if (width >= progress) {
+				clearInterval(id);
+			} else {
+				width++;
+				bar.style.width = width + '%';
+			}
+		}
+
+		if (data.message=='error') {
+            progress = 100;
+            status.innerHTML = "Connection to database could not be established, redirecting...";
+            bar.style.backgroundColor = "#cc0000";
+            setTimeout(function() {
+                $("#loading_bar").toggleClass("hide");
+                $("#home_page").toggleClass("hide");
+            }, redirectDelay);
+		}
+		if (data.message=='done') {
+            progress = 100;
+			status.innerHTML = "Data retrieved from database, redirecting...";
+			setTimeout(function() {
+                $("#loading_bar").toggleClass("hide");
+                $("#results_page").toggleClass("hide");
+			}, redirectDelay);
+		}
+
+		var id = setInterval(frame, 10);
+	});
+
+	socket.on('restAPI', function(data){
+        var bar = document.getElementById("myBar");
+		var status = document.getElementById("status");
+
+		var width;
+		var progress;
+		var redirectDelay = 3000;
+
+		function frame() {
+			if (width >= progress) {
+				clearInterval(id);
+			} else {
+				width++;
+				bar.style.width = width + '%';
+			}
+		}
+
+		if (data.message=='dbError') {
+			width = 0;
+			progress = 33;
+			status.innerHTML = "...";
+			bar.style.backgroundColor = "#fbd744";
+			status.innerHTML = "Connection to database could not be established, tweets will not be saved.";
+		}
+		if (data.message=='dbSuccess') {
+			width = 0;
+			progress = 33;
+			status.innerHTML = "Connection to database established, tweets will be saved.";
+		}
+		if (data.message=='done') {
+			width = 33;
+			progress = 100;
+			status.innerHTML = "Data retrieved from Twitter, redirecting...";
+			setTimeout(function() {
+                $("#loading_bar").toggleClass("hide");
+                $("#results_page").toggleClass("hide");
+
+                initializeTable(data.tweets);
+			}, redirectDelay);
+		}
+
+		var id = setInterval(frame, 10);
+	});
+}
+
+function initializeTable(tweets){
+    var table = $('.search-results').DataTable( {
+        'searching': false,
+        'lengthChange': false,
+        'info': false,
+        'order': [[ 3, 'desc' ]],
+        'columnDefs': [{
+            'targets': [1,2],
+            'orderable': false
+        }
+        ],
+        'language': {
+            'paginate': {
+                'previous': '<',
+                'next': '>'
+            }
+        }
+    });
+    for (tweet in tweets) {
+        var author = "<a href='https://twitter.com/"+tweets[tweet][1]+"'>"+tweets[tweet][0]+"</a><br/><a class='screenname' href='https://twitter.com/"+tweets[tweet][1]+"'>@"+tweets[tweet][1]+"</a>";
+        var content = tweets[tweet][2];
+        var link = "<a class='tweeturl' href='https://twitter.com/id/status/"+tweets[tweet][5]+"'><span class='fa fa-external-link'></span></a>";
+        var date = tweets[tweet][3];
+
+        var row = table.row.add([
+                author,
+                content,
+                link,
+                date
+            ]).draw()
+    }
+}
 
 
 app.initialize();

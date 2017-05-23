@@ -7,10 +7,6 @@ var currentStream;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	if (!req.app.get('io')) {
-		var io = socket_io.listen(req.socket.server);
-		req.app.set('io',io);
-	}
 	if (!Object.keys(req.query).length) {
 		res.render('index', { title: 'Football Gossip Application' });
 	} else {
@@ -41,7 +37,13 @@ router.post('/postFile', function(req, res){
 	
 	var tweetData = [];
 	
-	var io = req.app.get('io');
+	var io;
+	if (!req.app.get('io')) {
+		io = socket_io.listen(req.socket.server);
+		req.app.set('io',io);
+	} else {
+		io = req.app.get('io');
+	}
  
 //initialize last week dates
 	for (day=0;day<lastWeekCount.length;day++) {
@@ -91,7 +93,7 @@ router.post('/postFile', function(req, res){
 						username: username,
 						screenname: screenName,
 						content: tweetText,
-						date: createdAt,
+						date: createdAt.toLocaleString(),
 						authorID: authorID,
 						tweetID: tweetID,
 					}
@@ -109,11 +111,11 @@ router.post('/postFile', function(req, res){
 					if (totalCount>0) {
 						searchTweets(query, count, totalCount, connection, dbErr);
 					}else{
-						io.emit('restAPI', { message: 'done' });
+						io.emit('restAPI', { message: 'done', tweets: tweetData});
 					}
 				} else {
 					setTimeout(function() {
-						io.emit('restAPI', { message: 'done' });
+						io.emit('restAPI', { message: 'done', tweets: tweetData });
 					}, 500);
 				}
 			}
@@ -193,7 +195,7 @@ router.post('/postFile', function(req, res){
 					username: username,
 					screenname: screenName,
 					content: tweetText,
-					date: createdAt,
+					date: createdAt.toLocaleString(),
 					authorID: authorID,
 					tweetID: tweetID,
 				}

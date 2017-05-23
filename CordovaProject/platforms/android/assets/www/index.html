@@ -78,29 +78,42 @@
             </div>
 
             <!-- loading bar page -->
-            <div id="loading_bar" style="display:none">
+            <div id="loading_bar" class="hide">
                 <h1>Football Gossip</h1>
                 <p class="lead"></p>
+                <p class="lead">Loading...</p>
                 <div class="myProgress" id="myProgress">
                     <div class="myBar" id="myBar">
                     </div>
-                    <p id="status">Connecting to the database...</p>
                 </div>
+                <p id="status">Connecting to the database...</p>
             </div>
             <!-- results page -->
-            <div id="results_page" style="display:none;">
+            <div id="results_page" class="hide">
                 <a href="#home_page" class="btn btn-default fa fa-reply">Back</a>
-                <div id="search-results">
-                    Search results:
-                </div>
-                <div id="trend-results">
-                    Frequency:
-                </div>
+                <h1 class="cover-heading">Search results:
+                    <div class="sideButton" id="sideChart">
+                        <div id="toggleChart"></div>
+                        <canvas class="hide" id="myChart" width="400" height="400"></canvas>
+                        <table class="search-results">
+                            <thead>
+                            <tr>
+                                <th class="author">Author</th>
+                                <th class="tweet">Tweet</th>
+                                <th class="link"></th>
+                                <th class="date">Date</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tweets"></tbody>
+                        </table>
+                    </div>
+                </h1>
             </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/socket.io.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="js/tweets.js"></script>
+        <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
     </body>
 </html>

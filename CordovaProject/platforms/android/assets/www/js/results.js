@@ -22,13 +22,12 @@ $(document).ready(function() {
 	socket.on('tweet', function(data){
 		var author = "<a href='https://twitter.com/"+data.tweet.screenname+"'>"+data.tweet.username+"</a>\
 			<br/><a class='screenname' href='https://twitter.com/"+data.tweet.screenname+"'>@"+data.tweet.screenname+"</a>";
-		var content = data.tweet.content;
 		var link = "<a class='tweeturl' href='https://twitter.com/id/status/"+data.tweet.tweetID+"'><span class='fa fa-external-link'></span></a>";
 		var date = data.tweet.date;
 		
 		var row = table.row.add([
 				author,
-				content,
+				data.tweet.content,
 				link,
 				date
 			]).draw().node();

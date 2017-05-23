@@ -1,0 +1,58 @@
+extend layout
+
+block content
+  div#dim-wrapper
+  div.site-wrapper
+    div.site-wrapper-inner
+      div.cover-container
+        div
+          div.inner
+            h3.masthead-brand Logo
+            nav
+              ul.nav.masthead-nav
+                li
+                  a(href='/') Home
+                li.active
+                  a(href='/results') Results
+        div.inner.cover
+          h1.cover-heading Search results:
+          div.sideButton#sideChart
+            div#toggleChart
+          if data
+            canvas.hide#myChart(width='400', height='400')
+            table.search-results
+              thead
+                tr
+                  th.author Author
+                  th.tweet Tweet
+                  th.link
+                  th.date Date
+              tbody
+                each val in data.tData
+                  tr
+                    td.author
+                      a(href='https://twitter.com/#{val[1]}')
+                        | #{val[0]}
+                      br
+                      a.screenname(href='https://twitter.com/#{val[1]}')
+                        | @#{val[1]}
+                    td.tweet
+                      |  #{val[2]}
+                    td.link
+                      a.tweeturl(href='https://twitter.com/id/status/#{val[5]}')
+                        | #[span.fa.fa-external-link]
+                    td.date= val[3]
+          else
+            p.lead Try search for something
+        div
+          div.inner
+            include footer
+
+block script
+  script(src='/js/chart.js')
+  if data
+    script.
+      var lwCount =!{JSON.stringify(data.lwCount)};
+      var lwDate =!{JSON.stringify(data.lwDate)};
+    script(src='/js/results.js')
+  script(src='/js/jquery.dataTables.min.js')

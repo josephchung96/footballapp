@@ -286,22 +286,14 @@ router.post('/postFile', function(req, res){
 	res.send(req.body);	
 });
 
-router.get('/trends', function(req, res, next){
+router.get('/results', function(req, res, next) {
+	var tweetData = req.app.get('tweetData');
 	var lastWeekCount = req.app.get('lastWeekCount');
 	var lastWeekDates = req.app.get('lastWeekDates');
-	if (lastWeekCount==null || lastWeekDates==null) {
-		res.render('trends', { title: 'Trends' });
-	}else{
-		res.render('trends', { title: 'Trends', data : {'lwCount' : lastWeekCount, 'lwDate' : lastWeekDates}});
-	}
-});
-
-router.get('/output', function(req, res, next) {
-	var tweetData = req.app.get('tweetData');
 	if (tweetData==null) {
-		res.render('output', { title: 'Output' });
+		res.render('results', { title: 'Output' });
 	}else{
-		res.render('output', { title: 'Output', data : {'tData' : tweetData}});
+		res.render('results', { title: 'Output', data : {'tData' : tweetData, 'lwCount' : lastWeekCount, 'lwDate' : lastWeekDates}});
 	}
 });
 

@@ -72,6 +72,17 @@ body {
     padding: 10px 0px 0px 0px;
 }
 
+/* Custom default button */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
+  box-shadow: 5px 5px 5px #333;
+}
+
 .search-form {
   color: #000;
   font-size: 16px;

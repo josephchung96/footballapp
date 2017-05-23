@@ -255,7 +255,7 @@ router.post('/postFile', function(req, res){
 						}
 					}
 					setTimeout(function() {
-						io.emit('dbOnly', { message: 'done' });
+						io.emit('dbOnly', { message: 'done' , tweets: tweetData});
 					}, 500);
 				});
 			} else {

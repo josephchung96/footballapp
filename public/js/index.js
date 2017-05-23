@@ -30,7 +30,7 @@ if (query) {
 			progress = 100;
 			status.innerHTML = "Data retrieved from database, redirecting...";
 			setTimeout(function() {
-			  window.location.href = '/output'
+			  window.location.href = '/results'
 			}, redirectDelay);
 		}
 

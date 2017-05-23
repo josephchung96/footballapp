@@ -19,6 +19,15 @@
 -->
 <html>
     <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
         <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"/>
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
@@ -31,7 +40,7 @@
     <body>
         <div class="app">
             <!-- home page-->
-            <div id="home_page" style="display:none">
+            <div id="home_page">
                 <h1>Football Gossip</h1>
                 <h4>Gossip is more popular than literature</h4>
                 Search by:<br>
@@ -58,10 +67,11 @@
                         <div id="author-search">
                             <input type="text" class="hide" id="author" name="author" placeholder="Search for author">
                         </div>
-                        <div id="search-button" class="form-layout">
-                            <!--<input type="submit" id="btnSearch" class="btn btn-primary form-layout hide" value="Search"/>-->
-                            <input type="submit" id="submit" class="btn btn-primary form-layout hide" value="Search"/>
-                        </div>
+                        <label class="hide" id="searchOption">
+                            <input id="database" type="checkbox" name="database" value="true"/> Only Database
+
+                        </label>
+                        <input class="hide" id="submit" type="submit" value="Search"/>
                     </form>
                 </div>
                 <div id="errorMsg" style="display:none">

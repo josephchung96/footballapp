@@ -208,6 +208,7 @@ function updateLoading(socket) {
 			setTimeout(function() {
                 $("#loading_bar").toggleClass("hide");
                 $("#results_page").toggleClass("hide");
+                initializeTable(data.tweets);
 			}, redirectDelay);
 		}
 
@@ -250,7 +251,6 @@ function updateLoading(socket) {
 			setTimeout(function() {
                 $("#loading_bar").toggleClass("hide");
                 $("#results_page").toggleClass("hide");
-
                 initializeTable(data.tweets);
 			}, redirectDelay);
 		}

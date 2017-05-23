@@ -34,58 +34,28 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
 
+        // buttons for the search options
         $("#btnPlayer").on( 'click', toggleSearch);
-
         $("#btnTeam").on( 'click', toggleSearch);
-
         $("#btnAuthor").on( 'click', toggleSearch);
 
-        // toggle the first and/or button
+        // toggle the and/or button
         $("#playerToTeam").on( 'click', toggleOperand);
-
-        //toggle the second and/or button
         $("#authorToPlayer").on( 'click', toggleOperand);
-
-        //toggle the third and/or button
         $("#teamToAuthor").on( 'click', toggleOperand);
 
         $("#submit").on("click", validateForm);
 
-        // RESULTS PAGE
+        // RESULTS PAGE redirect to homepage
         $("#btnBack").on("click", function() {
             $("#results_page").toggleClass("hide");
             $("#home_page").toggleClass("hide");
         });
 
-        $("#btnSearchResults").on("click", function() {
-            if ($("#btnSearchResults").hasClass("btn-default")) {
-                $("#btnSearchResults").toggleClass("btn-default btn-primary");
-                $("#btnTrends").toggleClass("btn-primary btn-default");
-                if ($("#results").hasClass("hide")) {
-                    $("#results").toggleClass("hide");
-                }
-                if (!$("#trends").hasClass("hide")) {
-                    $("#trends").toggleClass("hide");
-                }
-            }
-        });
-
-        $("#btnTrends").on("click", function() {
-            if ($("#btnTrends").hasClass("btn-default")) {
-                $("#btnTrends").toggleClass("btn-primary btn-default");
-                $("#btnSearchResults").toggleClass("btn-default btn-primary");
-                if ($("#trends").hasClass("hide")) {
-                    $("#trends").toggleClass("hide");
-                }
-                if (!$("#results").hasClass("hide")) {
-                    $("#results").toggleClass("hide");
-                }
-            }
-        });
-
     }
 };
 
+// used to toggle the different textboxes
 function toggleSearch() {
     var id = this.id.replace("btn", "").toLowerCase();
     var searchBar = document.getElementById(id);
@@ -140,6 +110,7 @@ function toggleSearch() {
     }
 }
 
+// used to toggle the and/or displays
 function toggleOperand() {
     var id = this.id;
 	var button = document.getElementById(id);
@@ -150,6 +121,7 @@ function toggleOperand() {
 	}
 }
 
+// validate the input from user
 function validateForm() {
 
     var player;
@@ -168,19 +140,20 @@ function validateForm() {
         alert("Search field cannot be empty");
     }else if (authorInit!='@' && authorInit!='') {
         alert("Author must be a Twitter handle");
-    }else{
+    }else{ // success
         sendAjaxQuery('http://10.0.2.2:3000/postFile', JSON.stringify($("#search-form").serializeObject()));
     }
      return false;
 }
 
 function sendAjaxQuery(url, data) {
+    // twitter querying
     $.ajax({
         type: 'POST',
         url: url,
         data: data,
         contentType: 'application/json',
-        success: function (data) {
+        success: function (data) { // redirect
             $("#home_page").toggleClass("hide");
             $("#loading_bar").toggleClass("hide");
             var socket = io.connect('http://10.0.2.2:3000');
@@ -207,6 +180,7 @@ $.fn.serializeObject = function () {
     return o;
 };
 
+// loading  bar
 function updateLoading(socket) {
     socket.on('dbOnly', function(data){
 		var bar = document.getElementById("myBar");
@@ -291,6 +265,7 @@ function updateLoading(socket) {
 	});
 }
 
+// settings for the results table
 function initializeTable(tweets){
     var table = $('.search-results').DataTable( {
         'searching': false,
@@ -309,6 +284,7 @@ function initializeTable(tweets){
             }
         }
     });
+    // iterate over all the tweets
     for (tweet in tweets) {
         var author = "<a href='https://twitter.com/"+tweets[tweet][1]+"'>"+tweets[tweet][0]+"</a><br/><a class='screenname' href='https://twitter.com/"+tweets[tweet][1]+"'>@"+tweets[tweet][1]+"</a>";
         var content = tweets[tweet][2];

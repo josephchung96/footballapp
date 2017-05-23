@@ -1,6 +1,7 @@
 var socket = io();
 
 $(document).ready(function() {
+    // table options
     var table = $('.search-results').DataTable( {
 			'searching': false,
 			'lengthChange': false,
@@ -52,10 +53,9 @@ $(document).ready(function() {
 
 });
 
-
-
 var ctx = document.getElementById('myChart');
 var myChart = new Chart(ctx, {
+    // frequency chart
     type: 'line',
     data: {
         labels: lwDate,

@@ -58,16 +58,29 @@ body {
     text-align:center;
 }
 
-.app #results_page a {
-    padding: 20px 20px 0px 0px;
+.app #results_page {
+    text-align:center;
 }
 
 .app h1 {
-  padding:50px 0px 0px 0px;
+  margin-top:50px;
+}
+
+.app #btnBack {
+    margin-top:-30px;
+    position:absolute;
+    left:10px;
 }
 
 .form-layout {
     padding: 10px 0px 0px 0px;
+}
+
+#results_page table {
+    margin:auto;
+    background-color:white;
+    opacity: 0.8;
+    width:90%;
 }
 
 /* Landscape layout (with min-width) */

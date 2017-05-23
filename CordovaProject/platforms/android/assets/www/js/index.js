@@ -82,6 +82,38 @@ var app = {
 //            homePage.style.display = "none";
 //        });
 
+        // RESULTS PAGE
+        $("#btnBack").on("click", function() {
+            $("#results_page").toggleClass("hide");
+            $("#home_page").toggleClass("hide");
+        });
+
+        $("#btnSearchResults").on("click", function() {
+            if ($("#btnSearchResults").hasClass("btn-default")) {
+                $("#btnSearchResults").toggleClass("btn-default btn-primary");
+                $("#btnTrends").toggleClass("btn-primary btn-default");
+                if ($("#results").hasClass("hide")) {
+                    $("#results").toggleClass("hide");
+                }
+                if (!$("#trends").hasClass("hide")) {
+                    $("#trends").toggleClass("hide");
+                }
+            }
+        });
+
+        $("#btnTrends").on("click", function() {
+            if ($("#btnTrends").hasClass("btn-default")) {
+                $("#btnTrends").toggleClass("btn-primary btn-default");
+                $("#btnSearchResults").toggleClass("btn-default btn-primary");
+                if ($("#trends").hasClass("hide")) {
+                    $("#trends").toggleClass("hide");
+                }
+                if (!$("#results").hasClass("hide")) {
+                    $("#results").toggleClass("hide");
+                }
+            }
+        });
+
     }
 };
 

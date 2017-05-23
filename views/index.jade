@@ -50,4 +50,10 @@ block content
             include footer
 
 block script
+  if data
+    script.
+      var query =!{JSON.stringify(data.query)};
+  else
+    script.
+      var query;
   script(src='/js/index.js')

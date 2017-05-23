@@ -43,7 +43,7 @@ body {
   height: 100%; /* For at least Firefox */
   min-height: 100%;
   -webkit-box-shadow: inset 0 0 200px rgba(0,0,0,.8);
-      box-shadow: inset 0 0 200px rgba(0,0,0,.8);
+  box-shadow: inset 0 0 200px rgba(0,0,0,.8);
 }
 .site-wrapper-inner {
   display: table-cell;
@@ -109,7 +109,16 @@ body {
 /*
  * Cover
  */
-
+#dim-wrapper {
+  height:100%;
+  width:100%;
+  position:fixed;
+  left:0;
+  top:0;
+  opacity: 0;
+  background-color:black;
+  z-index: -1;
+}
 .cover {
   padding: 100px 20px;
 }
@@ -214,16 +223,104 @@ body {
 #myChart {
   padding: 20px;
   border: 2px solid #630015;
-  background-color: rgba(255,255,255,.9);
+  background-color: rgba(255,255,255,1);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  transform: translateX(-300%);
+  -webkit-transform: translateX(-300%);
+}
+.sideButton {
+  position: absolute;
+  background: rgba(255,255,255,1);
+  border-radius: 10px 0px 0px 10px;
+  border: 2px solid #630015;
+  cursor: pointer;
+  right: 0px;
+  width: 100px;
+  height: 100px;
+}
+#toggleChart {
+  margin: auto;
+  position: absolute;
+  top: 0; 
+  right: 0;
+  bottom: 0; 
+  left: 0;
+  width: 64px;
+  height: 64px;
+  background-image: url('/images/chart.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100px;
+}
+.slide-in {
+  animation: slide-in 1s forwards;
+  -webkit-animation: slide-in 1s forwards;
+}
+
+.slide-out {
+  animation: slide-out 1s forwards;
+  -webkit-animation: slide-out 1s forwards;
+}
+  
+@keyframes slide-in {
+  100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in {
+  100% { -webkit-transform: translateX(0%); }
+}
+  
+@keyframes slide-out {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-300%); }
+}
+
+@-webkit-keyframes slide-out {
+  0% { -webkit-transform: translateX(0%); }
+  100% { -webkit-transform: translateX(-300%); }
 }
 
 .search-results {
   font-size: 18px;
   text-align: left;
+  color: #333;
+  padding: 20px;
+  border: 2px solid #630015;
+  background-color: rgba(255,255,255,.9);
+}
+.search-results thead tr{
+  cursor: pointer;
+  border: 2px solid #630015;
+}
+.search-results thead th.sorting{
+  background: url('/images/sort_both.png') no-repeat right;
+}
+.search-results thead th.sorting_asc{
+  background: url('/images/sort_asc.png') no-repeat right;
+}
+.search-results thead th.sorting_desc{
+  background: url('/images/sort_desc.png') no-repeat right;
+}
+.search-results tbody tr{
+  border-top: 2px solid #efb7c2;
+}
+.search-results tbody tr:hover{
+  background-color: rgba(94,72,76,.1);
+}
+.search-results tbody td.sorting_1{
+  background-color: rgba(94,72,76,.1);
+}
+.search-results a{
+  color: #333;
 }
 .search-results a:hover,
 .search-results a:focus{
-   text-decoration: none;
+  text-decoration: none;
 }
 .search-results th,
 .search-results td{
@@ -251,6 +348,7 @@ body {
   text-decoration: none; 
 }
 .paginate_button{
+  cursor: pointer;
   color: #efb7c2;
   font-size: 24px;
   padding: 10px;
@@ -289,32 +387,13 @@ body {
  * Affix and center
  */
 
+.cover-container {
+  margin: auto;
+  width: 80%; 
+}
 @media (min-width: 768px) {
-  /* Pull out the header and footer */
-  .masthead {
-  position: fixed;
-  top: 0;
-  }
-  .mastfoot {
-  position: fixed;
-  bottom: 0;
-  }
   /* Start the vertical centering */
   .site-wrapper-inner {
   vertical-align: middle;
-  }
-  /* Handle the widths */
-  .masthead,
-  .mastfoot,
-  .cover-container {
-  width: 100%; /* Must be percentage or pixels for horizontal alignment */
-  }
-}
-
-@media (min-width: 992px) {
-  .masthead,
-  .mastfoot,
-  .cover-container {
-  width: 80%;
   }
 }

@@ -29,7 +29,7 @@ socket.on('dbOnly', function(data){
 		progress = 100;
 		status.innerHTML = "Data retrieved from database, redirecting...";
 		setTimeout(function() {
-		  window.location.href = '/output'
+		  window.location.href = '/results'
 		}, redirectDelay);
 	}
 	
@@ -71,7 +71,7 @@ socket.on('restAPI', function(data){
 		progress = 100;
 		status.innerHTML = "Data retrieved from Twitter, redirecting...";
 		setTimeout(function() {
-		  window.location.href = '/output'
+		  window.location.href = '/results'
 		}, redirectDelay);
 	}
 	

@@ -4,7 +4,7 @@ block content
   div.site-wrapper
     div.site-wrapper-inner
       div.cover-container
-        div.masthead.clearfix
+        div
           div.inner
             h3.masthead-brand Logo
             nav
@@ -12,12 +12,7 @@ block content
                 li.active
                   a(href='/') Home
                 li
-                  a(href='/trends') Trends
-                li
-                  a(href='#') Todo
-                li
-                  a(href='/output') Search
-
+                  a(href='/results') Results
         div.inner.cover
           h1.cover-heading Football gossip
           p.lead
@@ -49,7 +44,7 @@ block content
                 input(id='database', type='checkbox', name='database', value='true') 
                 |  Only Database
               input.hide(id='submit', type='submit' value='Search')
-        div.mastfoot
+        div
           div.inner
             include footer
 

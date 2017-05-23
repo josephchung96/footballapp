@@ -17,6 +17,7 @@
  * under the License.
  */
 var app = {
+
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -33,43 +34,180 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
 
+        $("#btnPlayer").on( 'click', function() {
+
+            // toggle player search box
+            if (!$("input#player").hasClass("hide")) {
+                $("input#player").val("");
+            }
+            $("input#player").toggleClass("hide");
+
+            // toggle search button
+            if ($("button#btnSearch").hasClass("hide")) {
+                $("button#btnSearch").toggleClass("hide");
+            } else if ($("input#player").hasClass("hide") && $("input#team").hasClass("hide") && $("input#author").hasClass("hide")) {
+                $("button#btnSearch").toggleClass("hide");
+            }
+
+            // toggle and/or buttons
+            if (!$("input#team").hasClass("hide") && $("input#author").hasClass("hide")) {
+                $("input#playerToTeam").toggleClass("hide");
+            } else if ($("input#team").hasClass("hide") && !$("input#author").hasClass("hide")) {
+                $("input#authorToPlayer").toggleClass("hide");
+            } else if (!$("input#player").hasClass("hide") && !$("input#team").hasClass("hide") && !$("input#author").hasClass("hide")) {
+                if ($("input#playerToTeam").hasClass("hide")) {
+                    $("input#playerToTeam").toggleClass("hide");
+                }
+                if ($("input#teamToAuthor").hasClass("hide")) {
+                    $("input#teamToAuthor").toggleClass("hide");
+                }
+                if (!$("input#authorToPlayer").hasClass("hide")) {
+                    $("input#authorToPlayer").toggleClass("hide");
+                }
+            } else if ($("input#player").hasClass("hide") && !$("input#team").hasClass("hide") && !$("input#author").hasClass("hide")) {
+                if ($("input#teamToAuthor").hasClass("hide")) {
+                    $("input#teamToAuthor").toggleClass("hide");
+                }
+                if (!$("input#playerToTeam").hasClass("hide")) {
+                    $("input#playerToTeam").toggleClass("hide");
+                }
+                if (!$("input#authorToPlayer").hasClass("hide")) {
+                    $("input#authorToPlayer").toggleClass("hide");
+                }
+            }
+
+        });
+
+        $("#btnTeam").on( 'click', function() {
+
+            //toggle team button
+            if (!$("input#team").hasClass("hide")) {
+                $("input#team").val("");
+            }
+            $("input#team").toggleClass("hide");
+
+            // toggle search button
+            if ($("button#btnSearch").hasClass("hide")) {
+                $("button#btnSearch").toggleClass("hide");
+            } else if ($("input#team").hasClass("hide") && $("input#player").hasClass("hide") && $("input#author").hasClass("hide")) {
+                $("button#btnSearch").toggleClass("hide");
+            }
+
+            // toggle and/or buttons
+            if (!$("input#player").hasClass("hide") && $("input#author").hasClass("hide")) {
+                $("input#playerToTeam").toggleClass("hide");
+            } else if ($("input#player").hasClass("hide") && !$("input#author").hasClass("hide")) {
+                $("input#teamToAuthor").toggleClass("hide");
+            } else if (!$("input#player").hasClass("hide") && !$("input#team").hasClass("hide") && !$("input#author").hasClass("hide")) {
+                if ($("input#playerToTeam").hasClass("hide")) {
+                    $("input#playerToTeam").toggleClass("hide");
+                }
+                if ($("input#teamToAuthor").hasClass("hide")) {
+                    $("input#teamToAuthor").toggleClass("hide");
+                }
+                if (!$("input#authorToPlayer").hasClass("hide")) {
+                    $("input#authorToPlayer").toggleClass("hide");
+                }
+            } else if (!$("input#player").hasClass("hide") && !$("input#author").hasClass("hide") && $("input#team").hasClass("hide")) {
+                if ($("input#authorToPlayer").hasClass("hide")) {
+                    $("input#authorToPlayer").toggleClass("hide");
+                }
+                if (!$("input#playerToTeam").hasClass("hide")) {
+                    $("input#playerToTeam").toggleClass("hide");
+                }
+                if (!$("input#teamToAuthor").hasClass("hide")) {
+                    $("input#teamToAuthor").toggleClass("hide");
+                }
+            }
+        });
+
+        $("#btnAuthor").on( 'click', function() {
+
+            // toggle author button
+            if (!$("input#author").hasClass("hide")) {
+                $("input#author").val("")
+            }
+            $("input#author").toggleClass("hide");
+
+            // toggle search button
+            if ($("button#btnSearch").hasClass("hide")) {
+                $("button#btnSearch").toggleClass("hide");
+            } else if ($("input#team").hasClass("hide") && $("input#player").hasClass("hide") && $("input#author").hasClass("hide")) {
+                $("button#btnSearch").toggleClass("hide");
+            }
+
+            //toggle and/or buttons
+            if (!$("input#player").hasClass("hide") && $("input#team").hasClass("hide")) {
+                $("input#authorToPlayer").toggleClass("hide");
+            } else if ($("input#player").hasClass("hide") && !$("input#team").hasClass("hide")) {
+                $("input#teamToAuthor").toggleClass("hide");
+            } else if (!$("input#player").hasClass("hide") && !$("input#team").hasClass("hide") && !$("input#author").hasClass("hide")) {
+                if ($("input#playerToTeam").hasClass("hide")) {
+                    $("input#playerToTeam").toggleClass("hide");
+                }
+                if ($("input#teamToAuthor").hasClass("hide")) {
+                    $("input#teamToAuthor").toggleClass("hide");
+                }
+                if (!$("input#authorToPlayer").hasClass("hide")) {
+                    $("input#authorToPlayer").toggleClass("hide");
+                }
+            } else if (!$("input#player").hasClass("hide") && !$("input#team").hasClass("hide") && $("input#author").hasClass("hide")) {
+                if ($("input#playerToTeam").hasClass("hide")) {
+                    $("input#playerToTeam").toggleClass("hide");
+                }
+                if (!$("input#authorToPlayer").hasClass("hide")) {
+                    $("input#authorToPlayer").toggleClass("hide");
+                }
+                if (!$("input#teamToAuthor").hasClass("hide")) {
+                    $("input#teamToAuthor").toggleClass("hide");
+                }
+            }
+        });
+
         // toggle the first and/or button
-        $("#btnAndOr1").on("click", function() {
-            var button = document.getElementById("btnAndOr1");
-            if (button.innerHTML=='and') {
-                button.innerHTML='or';
+        $("input#playerToTeam").on("click", function() {
+            var button = document.getElementById("playerToTeam");
+            if (button.value=='and') {
+                button.value='or';
             } else {
-                button.innerHTML='and';
+                button.value='and';
             }
         })
         //toggle the second and/or button
-        $("#btnAndOr2").on("click", function() {
-            var button = document.getElementById("btnAndOr2");
-            if (button.innerHTML=='and') {
-                button.innerHTML='or';
+        $("input#authorToPlayer").on("click", function() {
+            var button = document.getElementById("authorToPlayer");
+            if (button.value=='and') {
+                button.value='or';
             } else {
-                button.innerHTML='and';
+                button.value='and';
             }
-        });
-        $("btnSearch").on("click", function() {
-            var homePage = document.getElementById("home_page");
-            var resultsPage = document.getElementById("results_page");
-            var player = document.getElementById("player").value;
-            var team = document.getElementById("team").value;
-            var author = document.getElementById("author").value;
-            // TODO: validation function needed
-            resultsPage.style.display = "block";
-            homePage.style.display = "none";
-        });
+        })
+        //toggle the third and/or button
+        $("input#teamToAuthor").on("click", function() {
+            var button = document.getElementById("teamToAuthor");
+            if (button.value=='and') {
+                button.value='or';
+            } else {
+                button.value='and';
+            }
+        })
+//        document.getElementById("btnSearch").addEventListener("click", sendAjaxQuery('postFile', JSON.stringify($("#search-form").serializeObject()));
+//        $("btnSearch").on("click", function() {
+//            var homePage = document.getElementById("home_page");
+//            var resultsPage = document.getElementById("results_page");
+//            var player = document.getElementById("player").value;
+//            var team = document.getElementById("team").value;
+//            var author = document.getElementById("author").value;
+//            // TODO: validation function needed
+//            resultsPage.style.display = "block";
+//            homePage.style.display = "none";
+//        });
 
     }
 };
 
-function displayDivs() {
 
 
-
-}
 
 
 app.initialize();

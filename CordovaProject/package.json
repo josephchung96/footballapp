@@ -4,14 +4,18 @@
     "displayName": "footballapp",
     "cordova": {
         "platforms": [
-            "android"
+            "android",
+            "ios"
         ],
         "plugins": {
-            "cordova-plugin-whitelist": {}
+            "cordova-plugin-whitelist": {},
+            "cordova-sqlite-storage": {}
         }
     },
     "dependencies": {
-        "cordova-android": "~6.2.3",
-        "cordova-plugin-whitelist": "1"
+        "cordova-android": "^6.2.3",
+        "cordova-ios": "^4.4.0",
+        "cordova-plugin-whitelist": "1",
+        "cordova-sqlite-storage": "^2.0.4"
     }
 }

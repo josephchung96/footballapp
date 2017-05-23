@@ -50,27 +50,30 @@
                     <button class="btn btn-large btn-default" id="btnAuthor" name="btnAuthor"><i class="fa fa-pencil-square-o"></i>Author</button>
                 </div>
                 <div id="search-boxes">
-                    <div class="form-layout" id="player-search">
-                        <input type="text" id="player" name="player" placeholder="Search for player">
-                    </div>
-                    <div>
-                        <button class="btn btn-default" id="btnAndOr1" name="btnAndOr1" onclick="toggleBtn(this.id)">and</button>
-                    </div>
-                    <div id="team-search">
-                        <input type="text" id="team" name="team" placeholder="Search for team">
-                    </div>
-                    <div>
-                        <!-- <input type="button" class="btn btn-default" id="btnAndOr2" name="btnAndOr2" value="and"/> -->
-                        <button class="btn btn-default" id="btnAndOr2" name="btnAndOr2">and</button>
-                    </div>
-                    <div id="author-search">
-                        <input type="text" id="author" name="author" placeholder="Search for author">
-                    </div>
-                    <div id="searchQuery" class="form-layout">
-                        <button id="btnSearch" class="btn btn-primary">Search</button>
-                    </div>
+                    <form id="search-form">
+                        <div class="form-layout" id="player-search" style="display:none">
+                            <input type="text" id="player" name="player" placeholder="Search for player">
+                        </div>
+                        <div>
+                            <button class="btn btn-default" id="btnAndOr1" name="btnAndOr1">and</button>
+                        </div>
+                        <div id="team-search">
+                            <input type="text" id="team" name="team" placeholder="Search for team">
+                        </div>
+                        <div>
+                            <!-- <input type="button" class="btn btn-default" id="btnAndOr2" name="btnAndOr2" value="and"/> -->
+                            <button class="btn btn-default" id="btnAndOr2" name="btnAndOr2">and</button>
+                        </div>
+                        <div id="author-search">
+                            <input type="text" id="author" name="author" placeholder="Search for author">
+                        </div>
+                        <div id="searchQuery" class="form-layout">
+                            <button id="btnSearch" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
                 </div>
-                <p type="text" name="alertMessage" id="alertMessage"></p>
+                <div id="errorMsg" style="display:none">
+                </div>
             </div>
 
             <!-- results page -->

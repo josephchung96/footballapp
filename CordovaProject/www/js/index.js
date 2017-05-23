@@ -33,6 +33,15 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
 
+        $("#btnPlayer").on( "click", function() {
+            var player = document.getElementById('player-search');
+            var team = document.getElementById('team-search');
+            var author = document.getElementById('author-search');
+            player.style.display = "block";
+            team.style.display = "none";
+            author.style.display = "none";
+            console.log("working");
+        });
         // toggle the first and/or button
         $("#btnAndOr1").on("click", function() {
             var button = document.getElementById("btnAndOr1");
@@ -51,6 +60,7 @@ var app = {
                 button.innerHTML='and';
             }
         });
+        document.getElementById("btnSearch").addEventListener("click", sendAjaxQuery('postFile', JSON.stringify($("#search-form").serializeObject()));
         $("btnSearch").on("click", function() {
             var homePage = document.getElementById("home_page");
             var resultsPage = document.getElementById("results_page");
@@ -67,7 +77,7 @@ var app = {
 
 function displayDivs() {
 
-
+    alert("reached here");
 
 }
 

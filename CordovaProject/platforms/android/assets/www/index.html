@@ -49,7 +49,7 @@
                     <button class="btn btn-large btn-default" id="btnTeam" name="btnTeam"><i class="fa fa-users"></i>Team</button>
                     <button class="btn btn-large btn-default" id="btnAuthor" name="btnAuthor"><i class="fa fa-pencil-square-o"></i>Author</button>
                 </div>
-                <div id="search-boxes">
+                <div id="search-boxes" class="form-layout">
                     <form id="search-form" name="search-form" class="search-form">
                         <div id="player-search">
                             <input type="text" class="hide" id="player" name="player" placeholder="Search for player">
@@ -67,8 +67,9 @@
                         <div id="author-search">
                             <input type="text" class="hide" id="author" name="author" placeholder="Search for author">
                         </div>
-                        <div id="search-button">
-                            <input type="submit" id="btnSearch" class="btn btn-primary form-layout hide" value="Search"/>
+                        <div id="search-button" class="form-layout">
+                            <!--<input type="submit" id="btnSearch" class="btn btn-primary form-layout hide" value="Search"/>-->
+                            <input type="submit" id="submit" class="btn btn-primary form-layout hide" value="Search"/>
                         </div>
                     </form>
                 </div>
@@ -76,6 +77,16 @@
                 </div>
             </div>
 
+            <!-- loading bar page -->
+            <div id="loading_bar" style="display:none">
+                <h1>Football Gossip</h1>
+                <p class="lead"></p>
+                <div class="myProgress" id="myProgress">
+                    <div class="myBar" id="myBar">
+                    </div>
+                    <p id="status">Connecting to the database...</p>
+                </div>
+            </div>
             <!-- results page -->
             <div id="results_page" style="display:none;">
                 <a href="#home_page" class="btn btn-default fa fa-reply">Back</a>
@@ -90,5 +101,6 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/tweets.js"></script>
     </body>
 </html>

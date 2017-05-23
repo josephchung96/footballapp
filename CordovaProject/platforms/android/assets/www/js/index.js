@@ -43,10 +43,10 @@ var app = {
             $("input#player").toggleClass("hide");
 
             // toggle search button
-            if ($("button#btnSearch").hasClass("hide")) {
-                $("button#btnSearch").toggleClass("hide");
+            if ($("input#btnSearch").hasClass("hide")) {
+                $("input#btnSearch").toggleClass("hide");
             } else if ($("input#player").hasClass("hide") && $("input#team").hasClass("hide") && $("input#author").hasClass("hide")) {
-                $("button#btnSearch").toggleClass("hide");
+                $("input#btnSearch").toggleClass("hide");
             }
 
             // toggle and/or buttons
@@ -87,10 +87,10 @@ var app = {
             $("input#team").toggleClass("hide");
 
             // toggle search button
-            if ($("button#btnSearch").hasClass("hide")) {
-                $("button#btnSearch").toggleClass("hide");
+            if ($("input#btnSearch").hasClass("hide")) {
+                $("input#btnSearch").toggleClass("hide");
             } else if ($("input#team").hasClass("hide") && $("input#player").hasClass("hide") && $("input#author").hasClass("hide")) {
-                $("button#btnSearch").toggleClass("hide");
+                $("input#btnSearch").toggleClass("hide");
             }
 
             // toggle and/or buttons
@@ -130,10 +130,10 @@ var app = {
             $("input#author").toggleClass("hide");
 
             // toggle search button
-            if ($("button#btnSearch").hasClass("hide")) {
-                $("button#btnSearch").toggleClass("hide");
+            if ($("input#btnSearch").hasClass("hide")) {
+                $("input#btnSearch").toggleClass("hide");
             } else if ($("input#team").hasClass("hide") && $("input#player").hasClass("hide") && $("input#author").hasClass("hide")) {
-                $("button#btnSearch").toggleClass("hide");
+                $("input#btnSearch").toggleClass("hide");
             }
 
             //toggle and/or buttons
@@ -191,23 +191,61 @@ var app = {
                 button.value='and';
             }
         })
-//        document.getElementById("btnSearch").addEventListener("click", sendAjaxQuery('postFile', JSON.stringify($("#search-form").serializeObject()));
-//        $("btnSearch").on("click", function() {
-//            var homePage = document.getElementById("home_page");
-//            var resultsPage = document.getElementById("results_page");
-//            var player = document.getElementById("player").value;
-//            var team = document.getElementById("team").value;
-//            var author = document.getElementById("author").value;
-//            // TODO: validation function needed
-//            resultsPage.style.display = "block";
-//            homePage.style.display = "none";
-//        });
+
+        $("btnSearch").on("click", validateForm());
 
     }
 };
 
+function validateForm() {
 
+    var player = document.getElementById('search-form')['player'].value;
+    var team = document.getElementById('search-form')['team'].value;
+    var author = document.getElementById('search-form')['author'].value;
 
+    var author1 = author.charAt(0);
 
+    alert(player);
+
+//    if (player == '' && team == '' && author == '') {
+//        alert("Search fields cannot be empty!");
+//        return false;
+//    } else if (author1 != '@' && author1 != '') {
+//        alert("Author must be a Twitter handle! '@' ");
+//        return false;
+//    } else {
+        sendAjaxQuery('postFile', JSON.stringify($("#search-form").seralizeObject()));
+//    }
+
+}
+
+function sendAjaxQuery(url, data) {
+	$.ajax({
+		type: 'POST',
+		url: url,
+		data: data,
+		contentType: 'application/json',
+		success: function (data) {
+		},
+		error: function (xhr, status, error) {
+		}
+	});
+}
+
+$.fn.serializeObject = function () {
+	var o = {};
+	var a = this.serializeArray();
+	$.each(a, function () {
+		if (o[this.name] !== undefined) {
+			if (!o[this.name].push) {
+				o[this.name] = [o[this.name]];
+			}
+			o[this.name].push(this.value || '');
+		} else {
+			o[this.name] = this.value || '';
+		}
+	});
+	return o;
+};
 
 app.initialize();

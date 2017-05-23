@@ -1,5 +1,5 @@
 var socket = io();
- 
+
 socket.on('dbOnly', function(data){
 	var bar = document.getElementById("myBar");
 	var status = document.getElementById("status");
@@ -7,16 +7,16 @@ socket.on('dbOnly', function(data){
 	var width = 1;
 	var redirectDelay = 3000;
 	var progress;
-	
+
 	function frame() {
 		if (width >= progress) {
 			clearInterval(id);
 		} else {
-			width++; 
-			bar.style.width = width + '%'; 
+			width++;
+			bar.style.width = width + '%';
 		}
 	}
-	
+
 	if (data.message=='error') {
 		progress = 100;
 		status.innerHTML = "Connection to database could not be established, redirecting...";
@@ -29,11 +29,11 @@ socket.on('dbOnly', function(data){
 		progress = 100;
 		status.innerHTML = "Data retrieved from database, redirecting...";
 		setTimeout(function() {
-		  window.location.href = '/results'
+		  window.location.href = '/output'
 		}, redirectDelay);
 	}
-	
-	
+
+
 	var id = setInterval(frame, 10);
 });
 
@@ -44,27 +44,27 @@ socket.on('restAPI', function(data){
 	var width;
 	var progress;
 	var redirectDelay = 3000;
-	
+
 	function frame() {
 		if (width >= progress) {
 			clearInterval(id);
 		} else {
-			width++; 
-			bar.style.width = width + '%'; 
+			width++;
+			bar.style.width = width + '%';
 		}
 	}
-	
+
 	if (data.message=='dbError') {
 		width = 0;
 		progress = 33;
 		status.innerHTML = "...";
 		bar.style.backgroundColor = "#fbd744";
-		status.innerHTML = "Connection to database could not be established, tweets would not be saved.";
+		status.innerHTML = "Connection to database could not be established, tweets will not be saved.";
 	}
 	if (data.message=='dbSuccess') {
 		width = 0;
 		progress = 33;
-		status.innerHTML = "Connection to database established, tweets would be saved.";
+		status.innerHTML = "Connection to database established, tweets will be saved.";
 	}
 	if (data.message=='done') {
 		width = 33;
@@ -74,8 +74,8 @@ socket.on('restAPI', function(data){
 		  window.location.href = '/results'
 		}, redirectDelay);
 	}
-	
-	
+
+
 	var id = setInterval(frame, 10);
 });
 
@@ -145,30 +145,19 @@ function toggleOperand(id) {
 }
 
 function validateForm() {
-	
+
     var player;
     var team;
     var author;
-		
+
     var authorInit;
-	
-    player = document.getElementById('search')['player'].value;
-    team = document.getElementById('search')['team'].value;
-    author = document.getElementById('search')['author'].value;	
-
-    authorInit = author.charAt(0);
-
-    var teamInit;
-    var authorInit;
-
 
     player = document.getElementById('search')['player'].value;
     team = document.getElementById('search')['team'].value;
     author = document.getElementById('search')['author'].value;
 
-    teamInit = team.charAt(0);
     authorInit = author.charAt(0);
-
+	
 	if (player=='' && team=='' && author=='') {
 		alert("Search field cannot be empty");
         return false;

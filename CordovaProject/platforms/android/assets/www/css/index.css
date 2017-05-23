@@ -124,3 +124,21 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+/* loading page */
+
+#myProgress {
+  width: 60%;
+  margin: auto;
+  background-color: #ddd;
+  border-radius: 10px;
+  border: 3px solid #333;
+  box-shadow: 2px 2px 10px #333;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50;
+  border-radius: 5px;
+}

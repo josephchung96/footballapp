@@ -7,7 +7,8 @@ block content
       div.cover-container
         div
           div.inner
-            h3.masthead-brand Logo
+            h3.masthead-brand
+              img(src='/images/logo.png', alt='Logo', style='height:96px;')
             nav
               ul.nav.masthead-nav
                 li
@@ -27,7 +28,7 @@ block content
                   th.tweet Tweet
                   th.link
                   th.date Date
-              tbody
+              tbody#tweets
                 each val in data.tData
                   tr
                     td.author

@@ -17,6 +17,7 @@ a:hover {
   text-shadow: none; /* Prevent inheritance from `body` */
   background-color: #fff;
   border: 1px solid #fff;
+  box-shadow: 5px 5px 5px #333;
 }
 
 
@@ -333,7 +334,7 @@ body {
 .search-results .author{
   width: 20%;
 }
-.search-results .author .screenname{
+.search-results .screenname{
   color: #691727;
 }
 .search-results .tweet{

@@ -59,6 +59,10 @@ body {
     text-align:center;
 }
 
+.app #loading_bar {
+    text-align:center;
+}
+
 .app #results_page {
     text-align:center;
 }
@@ -78,15 +82,6 @@ body {
     padding: 10px 0px 0px 0px;
 }
 
-<<<<<<< HEAD
-#results_page table {
-    margin:auto;
-    background-color:white;
-    opacity: 0.8;
-    width:90%;
-}
-
-=======
 /* Custom default button */
 .btn-default,
 .btn-default:hover,
@@ -166,10 +161,11 @@ body {
 }
 
 .search-results {
-  font-size: 18px;
+  margin:auto;
+  width:90%;
+  font-size: 10px;
   text-align: left;
   color: #333;
-  padding: 20px;
   border: 2px solid #630015;
   background-color: rgba(255,255,255,.9);
 }
@@ -210,18 +206,6 @@ body {
   outline: none;
   text-decoration: none;
 }
-.search-results .author{
-  width: 20%;
-}
-.search-results .screenname{
-  color: #691727;
-}
-.search-results .tweet{
-  width: 60%;
-}
-.search-results .date{
-  width: 20%;
-}
 .dataTables_paginate a:hover,
 .dataTables_paginate a:focus{
   outline: none;
@@ -236,17 +220,16 @@ body {
 .paginate_button.current{
   color: #fff;
 }
->>>>>>> 161f1dc891ebf51dc148a58cd165040ffaf1636f
-/* Landscape layout (with min-width) */
+/* Landscape layout (with min-width) *//*
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
     .app {
         background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height
         margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
+                                      /* offset horizontal: half of image width and text area width
     }
 }
-
+/*
 h1 {
     font-size:24px;
     font-weight:normal;
@@ -292,7 +275,7 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
-/* loading page */
+/* loading page
 
 #myProgress {
   width: 60%;
@@ -308,4 +291,4 @@ h1 {
   height: 30px;
   background-color: #4CAF50;
   border-radius: 5px;
-}
+}*/

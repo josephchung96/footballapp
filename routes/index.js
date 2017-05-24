@@ -309,11 +309,11 @@ router.post('/postFile', function(req, res){
 					if (totalCount>0) {
 						searchTweets(query, count, totalCount, connection, dbErr);
 					}else{
-						io.emit('restAPI', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount});
+						io.emit('restAPI', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount, playerInfo:playerInfo });
 					}
 				} else {
 					setTimeout(function() {
-						io.emit('restAPI', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount });
+						io.emit('restAPI', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount, playerInfo:playerInfo });
 					}, 500);
 				}
 			}
@@ -377,7 +377,7 @@ router.post('/postFile', function(req, res){
 			
 			for (member in chelseaScreenName) {
 				var chelseaPlayer = chelseaScreenName[member];
-				if (player==chelseaPlayer && chelseaPlayer!='NIL' && player!='NIL') {
+				if (player.toLowerCase()==chelseaPlayer.toLowerCase() && chelseaPlayer!='NIL' && player!='NIL') {
 					isChelsea=true;
 					dbpedia=chelseaDbpedia[member];
 				}
@@ -385,7 +385,7 @@ router.post('/postFile', function(req, res){
 			
 			for (member in manutdScreenName) {
 				var manutdPlayer = manutdScreenName[member];
-				if (player==manutdPlayer && manutdPlayer!='NIL' && player!='NIL') {
+				if (player.toLowerCase()==manutdPlayer.toLowerCase() && manutdPlayer!='NIL' && player!='NIL') {
 					isManutd=true;
 					dbpedia=manutdDbpedia[member];
 				}
@@ -434,6 +434,8 @@ router.post('/postFile', function(req, res){
 						}
 					});
 				});
+			} else {
+				req.app.set('playerInfo', '');
 			}
 		}
 	}
@@ -529,7 +531,7 @@ router.post('/postFile', function(req, res){
 						}
 					}
 					setTimeout(function() {
-						io.emit('dbOnly', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount});
+						io.emit('dbOnly', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount, playerInfo: playerInfo });
 					}, 500);
 				});
 			} else {

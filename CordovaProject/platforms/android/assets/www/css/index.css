@@ -240,6 +240,10 @@ html {
   transform: translateX(-300%);
   -webkit-transform: translateX(-300%);
 }
+.sideMenu {
+  position: absolute;
+  right: 0px;
+}
 .sideButton {
   position: absolute;
   background: rgba(255,255,255,1);
@@ -249,6 +253,26 @@ html {
   right: 0px;
   width: 64px;
   height: 64px;
+}
+#sidePlayer {
+  top: 80px;
+}
+#playerInfoContainer {
+  width: 70%;
+  height: 80%;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 20px;
+  background-color: #A82B44;
+  position: absolute;
+  box-shadow: inset 0px 0px 200px #630015;
+  -webkit-box-shadow: inset 0px 0px 200px #630015;
+  text-shadow: 2px 2px 5px #000;
+  transform: translateX(-300%);
+  -webkit-transform: translateX(-300%);
 }
 #toggleChart {
   margin: auto;
@@ -260,6 +284,20 @@ html {
   width: 48px;
   height: 48px;
   background-image: url(../images/chart.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 48px;
+}
+#togglePlayer {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  background-image: url(../images/player.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 48px;

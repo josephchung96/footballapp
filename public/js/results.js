@@ -47,7 +47,7 @@ $toggleChart.addEventListener('click', function() {
 		
 	} else {
 		document.getElementById('dim-wrapper').style.zIndex = '1';
-		document.getElementById('sideChart').style.zIndex = '2';
+		document.getElementById('sideChart').style.zIndex = '3';
 		document.getElementById('chart').style.zIndex = '2';
 		
 		document.getElementById('toggleChart').style.backgroundImage = "url('/images/chart_select.png')";
@@ -62,41 +62,46 @@ $toggleChart.addEventListener('click', function() {
 });
 
 
+
 var $playerInfoContainer = document.getElementById('playerInfoContainer');
 var $togglePlayer = document.getElementById('togglePlayer');
 
-$togglePlayer.addEventListener('click', function() {
-    var isOpen = $playerInfoContainer.classList.contains('slide-in');
-	if (isOpen) {
-		
-		$('#sidePlayer').animate({
-			'backgroundColor': '#fff'
-		});
-		
-		$('#dim-wrapper').animate({
-			'opacity':0
-		}, function() {
-			document.getElementById('dim-wrapper').style.zIndex = '-1';
-			document.getElementById('sidePlayer').style.zIndex = 'auto';
-			document.getElementById('playerInfoContainer').style.zIndex = 'auto';
-			document.getElementById('togglePlayer').style.backgroundImage = "url('/images/player.png')";
-		});
-		
-	} else {
-		document.getElementById('dim-wrapper').style.zIndex = '1';
-		document.getElementById('sidePlayer').style.zIndex = '2';
-		document.getElementById('playerInfoContainer').style.zIndex = '2';
-		
-		document.getElementById('togglePlayer').style.backgroundImage = "url('/images/player_select.png')";
-		
-		$('#dim-wrapper').animate({
-			'opacity':0.5,
-		});
-		
-	}
+if ($togglePlayer!=null) {
+	$togglePlayer.addEventListener('click', function() {
+		var isOpen = $playerInfoContainer.classList.contains('slide-in');
+		if (isOpen) {
+			
+			$('#sidePlayer').animate({
+				'backgroundColor': '#fff'
+			});
+			
+			$('#dim-wrapper').animate({
+				'opacity':0
+			}, function() {
+				document.getElementById('dim-wrapper').style.zIndex = '-1';
+				document.getElementById('sidePlayer').style.zIndex = 'auto';
+				document.getElementById('playerInfoContainer').style.zIndex = 'auto';
+				document.getElementById('togglePlayer').style.backgroundImage = "url('/images/player.png')";
+			});
+			
+		} else {
+			document.getElementById('dim-wrapper').style.zIndex = '1';
+			document.getElementById('sidePlayer').style.zIndex = '3';
+			document.getElementById('playerInfoContainer').style.zIndex = '2';
+			
+			document.getElementById('togglePlayer').style.backgroundImage = "url('/images/player_select.png')";
+			
+			$('#dim-wrapper').animate({
+				'opacity':0.5,
+			});
+			
+		}
 
-    $playerInfoContainer.setAttribute('class', isOpen ? 'slide-out' : 'slide-in');
-});
+		$playerInfoContainer.setAttribute('class', isOpen ? 'slide-out' : 'slide-in');
+	});
+}
+	
+
 
 $(document).ready(function() {
     var table = $('.search-results').DataTable( {

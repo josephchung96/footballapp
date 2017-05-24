@@ -92,10 +92,41 @@
                 <div id="dim-wrapper"></div>
                 <input type="button" id="btnBack" class="btn btn-default fa fa-reply" value="Back"/>
                 <h1 class="cover-heading">Search results:
-                    <div class="sideButton" id="sideChart">
-                        <div id="toggleChart"></div>
+                    <div class="sideMenu">
+                        <div class="sideButton" id="sideChart">
+                            <div id="toggleChart"></div>
+                        </div>
+                        <div class="sideButton hide" id="sidePlayer">
+                            <div id="togglePlayer"></div>
+                        </div>
                     </div>
                     <canvas class="hide" id="chart" width="300" height="300">asd</canvas>
+                    <div class="hide" id="playerInfoContainer">
+                        <h1 class="cover-heading">Player Infomation</h1>
+                        <table class="playerTable">
+                            <tr class="photo"><img id="playerPhoto" alt="twitter_photo"/></tr>
+                            <tr>
+                                <table class="detail">
+                                    <tr>
+                                        <td class="field">Name:</td>
+                                        <td id="playerName" class="content"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Position:</td>
+                                        <td id="playerPos" class="content"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Date of Birth:</td>
+                                        <td id="playerDob" class="content"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Team:</td>
+                                        <td id="playerTeam" class="content"></td>
+                                    </tr>
+                                </table>
+                            </tr>
+                        </table>
+                    </div>
                     <table class="search-results">
                         <thead>
                         <tr>

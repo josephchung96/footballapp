@@ -89,7 +89,7 @@ var app = {
 
         	} else {
         		document.getElementById('dim-wrapper').style.zIndex = '1';
-        		document.getElementById('sideChart').style.zIndex = '2';
+        		document.getElementById('sideChart').style.zIndex = '3';
         		document.getElementById('chart').style.zIndex = '2';
                 document.getElementById('toggleChart').style.backgroundImage = "url(./images/chart_select.png)";
 
@@ -100,6 +100,42 @@ var app = {
         	}
 
             $chart.setAttribute('class', isOpen ? 'slide-out' : 'slide-in');
+        });
+
+        var $playerInfoContainer = document.getElementById('playerInfoContainer');
+        var $togglePlayer = document.getElementById('togglePlayer');
+
+        $togglePlayer.addEventListener('click', function() {
+            var isOpen = $playerInfoContainer.classList.contains('slide-in');
+            if (isOpen) {
+
+                $('#sidePlayer').animate({
+                    'backgroundColor': '#fff'
+                });
+
+                $('#dim-wrapper').animate({
+                    'opacity':0
+                }, function() {
+                    document.getElementById('dim-wrapper').style.zIndex = '-1';
+                    document.getElementById('sidePlayer').style.zIndex = 'auto';
+                    document.getElementById('playerInfoContainer').style.zIndex = 'auto';
+                    document.getElementById('togglePlayer').style.backgroundImage = "url(./images/player.png)";
+                });
+
+            } else {
+                document.getElementById('dim-wrapper').style.zIndex = '1';
+                document.getElementById('sidePlayer').style.zIndex = '3';
+                document.getElementById('playerInfoContainer').style.zIndex = '2';
+
+                document.getElementById('togglePlayer').style.backgroundImage = "url(./images/player_select.png)";
+
+                $('#dim-wrapper').animate({
+                    'opacity':0.5,
+                });
+
+            }
+
+            $playerInfoContainer.setAttribute('class', isOpen ? 'slide-out' : 'slide-in');
         });
 
     }
@@ -296,6 +332,7 @@ function socketUpdate(socket) {
                 $("#results_page").toggleClass("hide");
                 initializeTable(data.tweets);
                 initializeChart(data.lwDate, data.lwCount);
+                initializePlayer(data.playerInfo);
 			}, redirectDelay);
 		}
 
@@ -340,6 +377,7 @@ function socketUpdate(socket) {
                 $("#results_page").toggleClass("hide");
                 initializeTable(data.tweets);
                 initializeChart(data.lwDate, data.lwCount);
+                initializePlayer(data.playerInfo);
 			}, redirectDelay);
 		}
 
@@ -433,6 +471,18 @@ function initializeChart(lwDate, lwCount) {
             }
         }
     });
+}
+
+// setting for player info
+function initializePlayer(info){
+    $("#sidePlayer").toggleClass("hide");
+    $("#playerName").html(info.name);
+    $("#playerPos").html(info.pos);
+    $("#playerDob").html(info.dob);
+    $("#playerTeam").html(info.team);
+    $("#playerPhoto").attr("src", info.photo);
+    $('#playerPhoto').width(200); // Units are assumed to be pixels
+    $('#playerPhoto').height(200);
 }
 
 app.initialize();

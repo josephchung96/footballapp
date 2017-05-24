@@ -25,9 +25,9 @@ body {
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
     background:url(../images/splash.jpg) no-repeat bottom fixed;
+    background-size: cover;
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:12px;
-    color: #fff;
     height:100%;
     width:100%;
     margin:0px;
@@ -150,7 +150,16 @@ html {
   background-color: #4CAF50;
   border-radius: 5px;
 }
-
+#dim-wrapper {
+  height:100%;
+  width:100%;
+  position:fixed;
+  left:0;
+  top:0;
+  opacity: 0;
+  background-color:black;
+  z-index: -1;
+}
 .search-results {
   margin:auto;
   width:90%;
@@ -186,12 +195,19 @@ html {
   color: #333;
 }
 .search-results a:hover,
-.search-results a:focus{
+.search-results a:focus,
+.search-results a:visited{
   text-decoration: none;
 }
 .search-results th,
 .search-results td{
   padding: 10px;
+}
+.search-results .tweet{
+  width: 30%;
+}
+.search-results .screenname{
+  color: #691727;
 }
 .search-results th:focus{
   outline: none;
@@ -210,6 +226,70 @@ html {
 }
 .paginate_button.current{
   color: #fff;
+}
+#chart {
+  padding: 20px;
+  border: 2px solid #630015;
+  background-color: rgba(255,255,255,1);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  transform: translateX(-300%);
+  -webkit-transform: translateX(-300%);
+}
+.sideButton {
+  position: absolute;
+  background: rgba(255,255,255,1);
+  border-radius: 10px 0px 0px 10px;
+  border: 2px solid #630015;
+  cursor: pointer;
+  right: 0px;
+  width: 64px;
+  height: 64px;
+}
+#toggleChart {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  background-image: url(../images/chart.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 48px;
+}
+.slide-in {
+  animation: slide-in 1s forwards;
+  -webkit-animation: slide-in 1s forwards;
+}
+
+.slide-out {
+  animation: slide-out 1s forwards;
+  -webkit-animation: slide-out 1s forwards;
+}
+
+@keyframes slide-in {
+  100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in {
+  100% { -webkit-transform: translateX(0%); }
+}
+
+@keyframes slide-out {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-300%); }
+}
+
+@-webkit-keyframes slide-out {
+  0% { -webkit-transform: translateX(0%); }
+  100% { -webkit-transform: translateX(-300%); }
 }
 /* Landscape layout (with min-width) *//*
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {

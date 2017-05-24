@@ -96,7 +96,7 @@ $toggle.addEventListener('click', function() {
 			document.getElementById('dim-wrapper').style.zIndex = '-1';
 			document.getElementById('sideChart').style.zIndex = 'auto';
 			document.getElementById('myChart').style.zIndex = 'auto';
-			document.getElementById('toggleChart').style.backgroundImage = "url('/images/chart.png')";
+			document.getElementById('toggleChart').style.backgroundImage = "url(../images/chart.png)";
 		});
 		
 	} else {
@@ -104,7 +104,7 @@ $toggle.addEventListener('click', function() {
 		document.getElementById('sideChart').style.zIndex = '2';
 		document.getElementById('myChart').style.zIndex = '2';
 		
-		document.getElementById('toggleChart').style.backgroundImage = "url('/images/chart_select.png')";
+		document.getElementById('toggleChart').style.backgroundImage = "url(../images/chart_select.png)";
 		
 		$('#dim-wrapper').animate({
 			'opacity':0.5,

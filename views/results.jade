@@ -17,10 +17,35 @@ block content
                   a(href='/results') Results
         div.inner.cover
           h1.cover-heading Search results:
-          div.sideButton#sideChart
-            div#toggleChart
           if data
-            canvas.hide#myChart(width='400', height='400')
+            div.sideMenu
+              div.sideButton#sideChart
+                div#toggleChart
+              if data.playerInfo
+                div.sideButton#sidePlayer
+                  div#togglePlayer
+            canvas.hide#chart(width='640', height='640')
+            if data.playerInfo
+              div.hide#playerInfoContainer
+                h1.cover-heading Player Infomation
+                table.playerTable
+                  tr
+                    td.photo
+                      img(src='#{data.playerInfo.photo}', alt='twitter_photo')
+                    td 
+                      table.detail
+                        tr
+                          td.field Name:
+                          td.content=data.playerInfo.name
+                        tr
+                          td.field Position:
+                          td.content=data.playerInfo.pos
+                        tr
+                          td.field Date of Birth:
+                          td.content=data.playerInfo.dob
+                        tr
+                          td.field Team:
+                          td.content=data.playerInfo.team
             table.search-results
               thead
                 tr

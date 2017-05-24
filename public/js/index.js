@@ -157,9 +157,31 @@ function validateForm() {
     player = document.getElementById('search')['player'].value;
     team = document.getElementById('search')['team'].value;
     author = document.getElementById('search')['author'].value;
+	
+	playerToTeam = document.getElementById('search')['playerToTeam'].value;
+	teamToAuthor = document.getElementById('search')['teamToAuthor'].value;
+	authorToPlayer = document.getElementById('search')['authorToPlayer'].value;
 
     authorInit = author.charAt(0);
 	
+	if (playerToTeam!='') {
+		if (player=='' || team=='') {
+			alert("Search field cannot be empty");
+			return false;
+		}
+	}
+	if (teamToAuthor!='') {
+		if (team=='' || author=='') {
+			alert("Search field cannot be empty");
+			return false;
+		}
+	}
+	if (authorToPlayer!='') {
+		if (player=='' || author=='') {
+			alert("Search field cannot be empty");
+			return false;
+		}
+	}
 	if (player=='' && team=='' && author=='') {
 		alert("Search field cannot be empty");
         return false;

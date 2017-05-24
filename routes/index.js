@@ -3,11 +3,9 @@ var router = express.Router();
 var dbcon = require('../config/db.js');
 var client = require('../config/twitter.js');
 var socket_io = require('socket.io');
-var rdf = require('rdf')
-var sparql = require('sparql')
-var sparql_client = require('sparql-client')
-var util = require('util')
-var endpoint = 'http://dbpedia.org/spqrql'
+var SparqlClient = require('sparql-client');
+var util = require('util');
+var endpoint = 'http://dbpedia.org/sparql';
 var currentStream;
 
 /* GET home page. */
@@ -41,6 +39,7 @@ router.post('/postFile', function(req, res){
 	var totalCount = 300;
 	
 	var tweetData = [];
+	var playerInfo;
 	
 	var io;
 	if (!req.app.get('io')) {
@@ -49,6 +48,200 @@ router.post('/postFile', function(req, res){
 	} else {
 		io = req.app.get('io');
 	}
+					
+	var chelseaScreenName = ['@FALCAO',
+							 '@rubey_lcheek',
+							 'NIL',
+							 'NIL',
+							 '@LucasPiazon',
+							 'NIL',
+							 '@Toddy_Kane',
+							 '@MattMiazga3',
+							 'NIL',
+							 '@CharlyMusondajr',
+							 'NIL',
+							 '@AmeliaGoalie',
+							 '@oscar8',
+							 '@GaryJCahill',
+							 'NIL',
+							 '@lew_baker',
+							 '@MatejDelac',
+							 '@asmir1',
+							 '@JohnSwift8',
+							 'NIL',
+							 'NIL',
+							 'NIL',
+							 '@ChristianAtsu20',
+							 '@DomSolanke',
+							 '@hazardeden10',
+							 '@izzyjaybrown',
+							 '@Big_Blacks',
+							 '@BogaJeremie',
+							 '@Big_hec35',
+							 '@mich_beeney1',
+							 'NIL',
+							 '@NathanAke',
+							 '@chalobah',
+							 '@papydjilo15 ',
+							 '@Patrick_Bamford',
+							 'NIL',
+							 '@Wallace Oliveira',
+							 '@AlexandrePato',
+							 '@danilo_pantic',
+							 '@Cuadrado',
+							 '@KalasOfficial',
+							 '@MM_MarkoMarin',
+							 '@cesc4official',
+							 '@thibautcourtois',
+							 '@VictorMoses',
+							 '@diegocosta',
+							 'NIL',
+							 '@mikel_john_obi',
+							 '@_Pedro17_',
+							 '@keenedy11',
+							 'NIL',
+							 '@LRemy18',
+							 '@CesarAzpi',
+							 '@KurtZouma',
+							 '@willianborges88',
+							 '@omeruo22']
+						 
+	var chelseaDbpedia = ['Radamel_Falcao',
+						  'Ruben_Loftus-Cheek',
+						  'Stipe_Perica',
+						  'Branislav_Ivanovi%C4%87',
+						  'Lucas_Piazon',
+						  'Mario_Pa%C5%A1ali%C4%87',
+						  'Todd_Kane',
+						  'Matt_Miazga',
+						  'Joao_Rodr%C3%ADguez_(footballer)',
+						  'Charly_Musonda_(footballer,_born_1996)',
+						  'John_Terry',
+						  'Marco_Amelia',
+						  'Oscar_(footballer,_born_1991)',
+						  'Gary_Cahill',
+						  'Marco_van_Ginkel',
+						  'Lewis_Baker_(footballer)',
+						  'Matej_Dela%C4%8D',
+						  'Asmir_Begovi%C4%87',
+						  'John_Swift_(footballer,_born_1995)',
+						  'Andreas_Christensen',
+						  'Baba_Rahman',
+						  'Bertrand_Traor%C3%A9',
+						  'Christian_Atsu',
+						  'Dominic_Solanke',
+						  'Eden_Hazard',
+						  'Isaiah_Brown',
+						  'Jamal_Blackman',
+						  'J%C3%A9r%C3%A9mie_Boga',
+						  'Michael_Hector',
+						  'Mitchell_Beeney',
+						  'Nathan_(footballer,_born_1996)',
+						  'Nathan_Ak%C3%A9',
+						  'Nathaniel_Chalobah',
+						  'Papy_Djilobodji',
+						  'Patrick_Bamford',
+						  'Victorien_Angban',
+						  'Wallace_Oliveira',
+						  'Alexandre_Pato',
+						  'Danilo_Panti%C4%87',
+						  'Juan_Cuadrado',
+						  'Tom%C3%A1%C5%A1_Kalas',
+						  'Marko_Marin',
+						  'Cesc_F%C3%A0bregas',
+						  'Thibaut_Courtois',
+						  'Victor_Moses',
+						  'Diego_Costa',
+						  'Cristi%C3%A1n_Cuevas',
+						  'John_Obi_Mikel',
+						  'Pedro_(footballer,_born_July_1987)',
+						  'Kenedy_(footballer)',
+						  'Nemanja_Mati%C4%87',
+						  'Lo%C3%AFc_R%C3%A9my',
+						  'C%C3%A9sar_Azpilicueta',
+						  'Kurt_Zouma',
+						  'Willian_(footballer)',
+						  'Kenneth_Omeruo']
+						  
+	var manutdScreenName = ['@AnthonyMartial',
+                            '@andrinhopereira',
+                            '@LukeShaw23',
+                            '@Fellaini',
+                            '@PadMcnair',
+                            '@JesseLingard',
+                            '@AnderHerrera',
+                            '@BlindDaley',
+                            '@joeriley49',
+                            '@DareToBorthwick',
+                            '@ChrisSmalling',
+                            'NIL',
+                            '@ElgatoPereira1',
+                            'NIL',
+                            '@MarcusRashford',
+                            '@PhilJones',
+                            '@samjohnstone50',
+                            '@tfosumensah',
+                            '@1victorvaldes',
+                            '@DarmianOfficial',
+                            '@TylerNBlackett',
+                            '@ReganPoole',
+                            '@Jamesweir47',
+                            '@Memphis_Depay',
+                            'NIL',
+                            '@adnanjanuzaj',
+                            '@carras16',
+                            '@schneiderlinmo4',
+                            '@D_DeGea',
+                            'NIL',
+                            '@BSchweinsteiger',
+                            '@anto_v25 ',
+                            'NIL',
+                            '@guille_varela4',
+                            '@juanmata8',
+                            '@NPowell25',
+                            'NIL',
+                            '@WayneRooney',
+                            '@youngy18']
+							
+	var manutdDbpedia =  ['Anthony_Martial',
+						  'Andreas_Pereira',
+						  'Luke_Shaw',
+						  'Marouane_Fellaini',
+						  'Paddy_McNair',
+						  'Jesse_Lingard',
+						  'Ander_Herrera',
+						  'Daley_Blind',
+						  'Joe_Riley_(footballer,_born_1996)',
+						  'Cameron_Borthwick-Jackson',
+						  'Chris_Smalling',
+						  'Joe_Rothwell',
+						  'Joel_Castro_Pereira',
+						  'Marcos_Rojo',
+						  'Marcus_Rashford',
+						  'Phil_Jones_(footballer,_born_1992)',
+						  'Sam_Johnstone',
+						  'Timothy_Fosu-Mensah',
+						  'V%C3%ADctor_Vald%C3%A9s',
+						  'Matteo_Darmian',
+						  'Tyler_Blackett',
+						  'Regan_Poole',
+						  'James_Weir_(footballer)',
+						  'Memphis_Depay',
+						  'Will_Keane',
+						  'Adnan_Januzaj',
+						  'Michael_Carrick',
+						  'Morgan_Schneiderlin',
+						  'David_de_Gea',
+						  'James_Wilson_(footballer,_born_1995)',
+						  'Bastian_Schweinsteiger',
+						  'Antonio_Valencia',
+						  'Sergio_Romero',
+						  'Guillermo_Varela',
+						  'Juan_Mata',
+						  'Nick_Powell',
+						  'Donald_Love',
+						  'Wayne_Rooney',
+						  'Ashley_Young']
  
 //initialize last week dates
 	for (day=0;day<lastWeekCount.length;day++) {
@@ -116,57 +309,16 @@ router.post('/postFile', function(req, res){
 					if (totalCount>0) {
 						searchTweets(query, count, totalCount, connection, dbErr);
 					}else{
-						io.emit('restAPI', { message: 'done', tweets: tweetData});
+						io.emit('restAPI', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount});
 					}
 				} else {
 					setTimeout(function() {
-						io.emit('restAPI', { message: 'done', tweets: tweetData });
+						io.emit('restAPI', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount });
 					}, 500);
 				}
 			}
 		});
 	}
-
-//query combination guards
-	if (playerToTeam=='or') {
-		query = player + ' OR ' + team;
-	} else if (!player) {
-		query = team;
-	} else if (!team) {
-		query = player;
-	} else {
-		query = player + ' ' + team
-	}
-	
-	tracks = query;
-	
-	if (author) {
-			
-		if (author==player && author!=team) {
-			query = query + ' -from:'+ player;
-		}
-		
-		if (author!=player && author==team) {
-			query = query + ' -from:'+ team;
-		}
-		
-		if (teamToAuthor=='and' || authorToPlayer=='and') {
-			query =	query + ' from:'+ author;
-		} else if (player || team) {
-			query = query + ' OR from:'+ author;
-		} else {
-			query = 'from:'+ author;
-		}
-		
-	} else {
-		if (player && team) {
-			query = query + ' -from:' + player + ' -from:' + team;
-		} else if (!team) {
-			query = query + ' -from:' + player;
-		} else if (!player) {
-			query = query + ' -from:' + team;
-		}
-	}	
 
 //twitter streaming into db
 	function streamTweets(stream, connection, dbErr) {
@@ -213,12 +365,128 @@ router.post('/postFile', function(req, res){
 			}
 		});
 	}
+
+//dbpedia query
+	function searchdbpedia(){
+		
+		if (player) {
+				
+			var isChelsea=false;
+			var isManutd=false;
+			var dbpedia;
+			
+			for (member in chelseaScreenName) {
+				var chelseaPlayer = chelseaScreenName[member];
+				if (player==chelseaPlayer && chelseaPlayer!='NIL' && player!='NIL') {
+					isChelsea=true;
+					dbpedia=chelseaDbpedia[member];
+				}
+			}
+			
+			for (member in manutdScreenName) {
+				var manutdPlayer = manutdScreenName[member];
+				if (player==manutdPlayer && manutdPlayer!='NIL' && player!='NIL') {
+					isManutd=true;
+					dbpedia=manutdDbpedia[member];
+				}
+			}
+			
+			if (isChelsea || isManutd) {
+				
+				var q = "PREFIX  dbo:  <http://dbpedia.org/ontology/>"+
+						"PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+
+						"PREFIX  dbp:  <http://dbpedia.org/property/>"+
+						"PREFIX  dbr:  <http://dbpedia.org/resource/>"+
+
+						"SELECT ?name ?position ?birthDate ?team "+
+						"WHERE"+
+						"  { dbr:"+dbpedia+
+						"              rdfs:label       ?name ;"+
+						"              dbo:birthDate    ?birthDate;"+
+						"              dbo:position     ?x;"+
+						"              dbp:currentclub  ?y."+
+						"   ?x         rdfs:label       ?position."+
+						"   ?y         rdfs:label       ?team."+
+
+						'    FILTER langMatches(lang(?name), "EN")'+
+						'    FILTER langMatches(lang(?position), "EN")'+
+						'    FILTER langMatches(lang(?team), "EN")'+
+						"  }"
+				 
+				var sparql = new SparqlClient(endpoint);
+				
+				client.get('users/show', {screen_name: player.substring(1)} , function(err, data, response) {
+					var photoURL;
+					if (data.profile_image_url) {
+						photoURL = data.profile_image_url.replace("_normal","");
+					}
+					sparql.query(q).execute(function(error, results) {
+						if (!error) {
+							var data = results.results.bindings[0];
+							playerInfo = {
+								name : data.name.value,
+								pos	 : data.position.value,
+								dob	 : data.birthDate.value,
+								team : data.team.value,
+								photo: photoURL
+							};
+							req.app.set('playerInfo', playerInfo);
+						}
+					});
+				});
+			}
+		}
+	}
 	
 //search
+
+//query combination guards
+	if (playerToTeam=='or') {
+		query = player + ' OR ' + team;
+	} else if (!player) {
+		query = team;
+	} else if (!team) {
+		query = player;
+	} else {
+		query = player + ' ' + team
+	}
+	
+	tracks = query;
+	
+	if (author) {
+			
+		if (author==player && author!=team) {
+			query = query + ' -from:'+ player;
+		}
+		
+		if (author!=player && author==team) {
+			query = query + ' -from:'+ team;
+		}
+		
+		if (teamToAuthor=='and' || authorToPlayer=='and') {
+			query =	query + ' from:'+ author;
+		} else if (player || team) {
+			query = query + ' OR from:'+ author;
+		} else {
+			query = 'from:'+ author;
+		}
+		
+	} else {
+		if (player && team) {
+			query = query + ' -from:' + player + ' -from:' + team;
+		} else if (!team) {
+			query = query + ' -from:' + player;
+		} else if (!player) {
+			query = query + ' -from:' + team;
+		}
+	}
+
 	dbcon.connectdb(function(dbErr, connection){
 
 		if (database) {
-			
+			if (currentStream) {
+				currentStream.stop();
+			}
 			var sqlQuery = 'SELECT * FROM Tweet ';
 			
 			if (player) {
@@ -243,6 +511,7 @@ router.post('/postFile', function(req, res){
 			sqlQuery = sqlQuery+")";
 			
 			if (!dbErr) {
+				searchdbpedia();
 				connection.query(sqlQuery, function(err,res){
 					if(err) throw err;
 					for (tweet in res) {
@@ -260,7 +529,7 @@ router.post('/postFile', function(req, res){
 						}
 					}
 					setTimeout(function() {
-						io.emit('dbOnly', { message: 'done' , tweets: tweetData});
+						io.emit('dbOnly', { message: 'done', tweets: tweetData, lwDate: lastWeekDates, lwCount: lastWeekCount});
 					}, 500);
 				});
 			} else {
@@ -276,7 +545,7 @@ router.post('/postFile', function(req, res){
 			} else {
 				io.emit('restAPI', { message: 'dbError' });
 			}
-
+			searchdbpedia();
 			searchTweets(query, count, totalCount, connection, dbErr);
 
 		// STREAMING API
@@ -308,88 +577,11 @@ router.post('/postFile', function(req, res){
 			
 		}
     });
-    /*
-    var chelseaScreenName = ['Radamel Falcao','Ruben Loftus Cheek','Stipe Perica',
-                             'Branislav Ivanovic','Lucas Piazon','Mario Pasalic',
-                             'Todd Kane','Matt Miazga','Joao Rodriguez',
-                             'Charly Musonda Jr','John Terry','Marco Amelia',
-                             'Oscar','Gary Cahill','Marco Van Ginkel',
-                             'Lewis Baker','Matej Delac','Asmir Begovic',
-                             'John Swift','Andreas Christensen','Baba Rahman',
-                             'Bertrand Traore','Christian Atsu','Dom Solanke',
-                             'Eden Hazard','Isaiah Brown','Jamal Blackman',
-                             'Jeremie Boga','Michael Hector','Mitchell Beeney',
-                             'Nathan','Nathan Ake','Nathaniel Chalobah','Papy Djilobodji',
-                             'Patrick Bamford','Victorien Angban','Wallace Oliveira',
-                             'Pato','Danilo Pantic','Juan Cuadrado','Tomas Kalas',
-                             'Marko Marin','Cesc Fabregas Soler','Thibaut Courtois','Victor Moses',
-                             'Diego Costa','Cristian Cuevas','Mikel John Obi','Pedro Rodriguez',
-                             'Robery Kenedy','Nemanja Matic','Loic Remy','Cesar Azpilicueta',
-                             'Kurt Zouma','Willian','Kenneth Omeruo']
-    var manutdScreenName = ['Anthony Martial','Andreas Pereira','Luke Shaw','Marouane Fellaini','Ander Herrera',
-                            'Daley Blind','Joe Riley','Borthwick Jackson','Chris Smalling','Joe Rothwell',
-                            'Joel Castro Pereira','Marcos Rojo','Marcus Rashford','Phil Jones','Sam Johnstone',
-                            'Timothy Fosu Mensah','Victor Valdes','Matteo Darmian','Tyler Blackett','Regan Poole',
-                            'James Weir','Memphis Depay','Will Keane','Adnan Januzaj','Michael Carrick',
-                            'Morgan Schneiderlin','David De Gea','James Wilson','Basti Schweinsteiger',
-                            'Antonio Valencia','Sergio Romero','Guillermo Varela','Juan Mata Garcia','Nick Powell',
-                            'Donald Love','Wayne Rooney','Ashley Young']
-    var chelseaDbpedia = ['http://dbpedia.org/resource/Radamel_Falcao','http://dbpedia.org/resource/Ruben_Loftus-Cheek',
-                          'http://dbpedia.org/resource/Stipe_Perica','http://dbpedia.org/resource/Branislav_Ivanovi%C4%87',
-                          'http://dbpedia.org/resource/Lucas_Piazon','http://dbpedia.org/resource/Mario_Pa%C5%A1ali%C4%87','http://dbpedia.org/resource/Todd_Kane',
-                          'http://dbpedia.org/resource/Matt_Miazga','http://dbpedia.org/resource/Joao_Rodr%C3%ADguez_(footballer)',
-                          'http://dbpedia.org/resource/Charly_Musonda_(footballer,_born_1996)','http://dbpedia.org/resource/John_Terry',
-                          'http://dbpedia.org/resource/Marco_Amelia','http://dbpedia.org/resource/Oscar_(footballer,_born_1991)',
-                          'http://dbpedia.org/resource/Gary_Cahill','http://dbpedia.org/resource/Marco_van_Ginkel','http://dbpedia.org/resource/Lewis_Baker_(footballer)',
-                          'http://dbpedia.org/resource/Matej_Dela%C4%8D','http://dbpedia.org/resource/Asmir_Begovi%C4%87'
-                          'http://dbpedia.org/resource/John_Swift_(footballer,_born_1995)','http://dbpedia.org/resource/Andreas_Christensen',
-                          'http://dbpedia.org/resource/Baba_Rahman','http://dbpedia.org/resource/Bertrand_Traor%C3%A9',
-                          'http://dbpedia.org/resource/Christian_Atsu','http://dbpedia.org/resource/Dominic_Solanke',
-                          'http://dbpedia.org/resource/Eden_Hazard','http://dbpedia.org/resource/Isaiah_Brown',
-                          'http://dbpedia.org/resource/Jamal_Blackman','http://dbpedia.org/resource/J%C3%A9r%C3%A9mie_Boga',
-                          'http://dbpedia.org/resource/Michael_Hector','http://dbpedia.org/resource/Mitchell_Beeney',
-                          'http://dbpedia.org/resource/Nathan_(footballer,_born_1996)','http://dbpedia.org/resource/Nathan_Ak%C3%A9',
-                          'http://dbpedia.org/resource/Nathaniel_Chalobah','http://dbpedia.org/resource/Papy_Djilobodji',
-                          'http://dbpedia.org/resource/Patrick_Bamford','http://dbpedia.org/resource/Victorien_Angban',
-                          'http://dbpedia.org/resource/Wallace_Oliveira','http://dbpedia.org/resource/Alexandre_Pato',
-                          'http://dbpedia.org/resource/Danilo_Panti%C4%87','http://dbpedia.org/resource/Juan_Cuadrado',
-                          'http://dbpedia.org/resource/Tom%C3%A1%C5%A1_Kalas','http://dbpedia.org/resource/Cesc_F%C3%A0bregas',
-                          'http://dbpedia.org/resource/Thibaut_Courtois','http://dbpedia.org/resource/Victor_Moses',
-                          'http://dbpedia.org/resource/Diego_Costa','http://dbpedia.org/resource/Cristi%C3%A1n_Cuevas',
-                          'http://dbpedia.org/resource/John_Obi_Mikel','http://dbpedia.org/resource/Pedro_(footballer,_born_July_1987)',
-                          'http://dbpedia.org/resource/Kenedy_(footballer)','http://dbpedia.org/resource/Nemanja_Mati%C4%87',
-                          'http://dbpedia.org/resource/Lo%C3%AFc_R%C3%A9my','http://dbpedia.org/resource/C%C3%A9sar_Azpilicueta',
-                          'http://dbpedia.org/resource/Kurt_Zouma','http://dbpedia.org/resource/Willian_(footballer)','http://dbpedia.org/resource/Kenneth_Omeruo']
-    var manutdDbpedia =  ['http://dbpedia.org/resource/Anthony_Martial','http://dbpedia.org/resource/Andreas_Pereira','http://dbpedia.org/resource/Luke_Shaw',
-                          'http://dbpedia.org/resource/Marouane_Fellaini','http://dbpedia.org/resource/Paddy_McNair','http://dbpedia.org/resource/Jesse_Lingard',
-                          'http://dbpedia.org/resource/Ander_Herrera','http://dbpedia.org/resource/Daley_Blind','http://dbpedia.org/resource/Joe_Riley_(footballer,_born_1996)',
-                          'http://dbpedia.org/resource/Cameron_Borthwick-Jackson','http://dbpedia.org/resource/Chris_Smalling','http://dbpedia.org/resource/Joe_Rothwell',
-                          'http://dbpedia.org/resource/Joel_Castro_Pereira','http://dbpedia.org/resource/Marcos_Rojo','http://dbpedia.org/resource/Marcus_Rashford',
-                          'http://dbpedia.org/resource/Phil_Jones_(footballer,_born_1992)','http://dbpedia.org/resource/Sam_Johnstone','http://dbpedia.org/resource/Timothy_Fosu-Mensah',
-                          'http://dbpedia.org/resource/V%C3%ADctor_Vald%C3%A9s','http://dbpedia.org/resource/Matteo_Darmian','http://dbpedia.org/resource/Tyler_Blackett',
-                          'http://dbpedia.org/resource/Regan_Poole','http://dbpedia.org/resource/James_Weir_(footballer)','http://dbpedia.org/resource/Memphis_Depay',
-                          'http://dbpedia.org/resource/Will_Keane','http://dbpedia.org/resource/Adnan_Januzaj','http://dbpedia.org/resource/Michael_Carrick',
-                          'http://dbpedia.org/resource/Morgan_Schneiderlin','http://dbpedia.org/resource/David_de_Gea','http://dbpedia.org/resource/James_Wilson_(footballer,_born_1995)',
-                          'http://dbpedia.org/resource/Bastian_Schweinsteiger','http://dbpedia.org/resource/Antonio_Valencia','http://dbpedia.org/resource/Juan_Mata',
-                          'http://dbpedia.org/resource/Nick_Powell','http://dbpedia.org/resource/Donald_Love',
-                          'http://dbpedia.org/resource/Wayne_Rooney','http://dbpedia.org/resource/Ashley_Young']
-    for (var i = 0; i <=  chelseaScreenName.length; i++)
-        var key1 = SEARCHWORD.replace(/\s/g, '').toLowerCase();
-        var key2 = chelseaScreenName[k].replace(/\s/g, '').toLowerCase();
-        var key3 = manutdScreenName[k].replace(/\s/g, '').toLowerCase();
-        if (key1 == key2)
-          var query = 'SELECT ?name ?position ?dob FROM ' + chelseaDbpedia[k] + 'WHERE {dbp.name ?name;  dbo.position ?position; dbo.birthDate ?dob }';
-        if (key1 == key3)
-          var query = 'SELECT ?name ?position ?dob FROM ' + manutdDbpedia[k] + 'WHERE {dbp.name ?name;  dbo.position ?position; dbo.birthDate ?dob }';
-        if (key1 != key2 && key1 != key3)
-    var client = new SparqlClient(endpoint);
-    client.query(query)
-    */
     
 // passing variables to route
-	req.app.set('tweetData',tweetData);
-	req.app.set('lastWeekCount',lastWeekCount);
-	req.app.set('lastWeekDates',lastWeekDates);
+	req.app.set('tweetData', tweetData);
+	req.app.set('lastWeekCount', lastWeekCount);
+	req.app.set('lastWeekDates', lastWeekDates);
 	res.send(req.body);	
 });
 
@@ -397,10 +589,20 @@ router.get('/results', function(req, res, next) {
 	var tweetData = req.app.get('tweetData');
 	var lastWeekCount = req.app.get('lastWeekCount');
 	var lastWeekDates = req.app.get('lastWeekDates');
+	var playerInfo = req.app.get('playerInfo');
+	
 	if (tweetData==null) {
 		res.render('results', { title: 'Football Gossip Application' });
 	}else{
-		res.render('results', { title: 'Football Gossip Application', data : {'tData' : tweetData, 'lwCount' : lastWeekCount, 'lwDate' : lastWeekDates}});
+		res.render('results', { 
+			title: 'Football Gossip Application', 
+			data : {
+				'tData' : tweetData, 
+				'lwCount' : lastWeekCount, 
+				'lwDate' : lastWeekDates, 
+				'playerInfo' : playerInfo
+			}
+		});
 	}
 });
 

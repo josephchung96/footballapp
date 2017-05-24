@@ -1,5 +1,103 @@
 var socket = io();
 
+var ctx = document.getElementById('chart');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: lwDate,
+        datasets: [{
+            label: 'Number of tweets',
+            data: lwCount,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 2
+        }]
+    },
+    options: {
+		responsive: false,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+var $chart = document.getElementById('chart');
+var $toggleChart = document.getElementById('toggleChart');
+
+$toggleChart.addEventListener('click', function() {
+    var isOpen = $chart.classList.contains('slide-in');
+	if (isOpen) {
+		
+		$('#sideChart').animate({
+			'backgroundColor': '#fff'
+		});
+		
+		$('#dim-wrapper').animate({
+			'opacity':0
+		}, function() {
+			document.getElementById('dim-wrapper').style.zIndex = '-1';
+			document.getElementById('sideChart').style.zIndex = 'auto';
+			document.getElementById('chart').style.zIndex = 'auto';
+			document.getElementById('toggleChart').style.backgroundImage = "url('/images/chart.png')";
+		});
+		
+	} else {
+		document.getElementById('dim-wrapper').style.zIndex = '1';
+		document.getElementById('sideChart').style.zIndex = '2';
+		document.getElementById('chart').style.zIndex = '2';
+		
+		document.getElementById('toggleChart').style.backgroundImage = "url('/images/chart_select.png')";
+		
+		$('#dim-wrapper').animate({
+			'opacity':0.5,
+		});
+		
+	}
+
+    $chart.setAttribute('class', isOpen ? 'slide-out' : 'slide-in');
+});
+
+
+var $playerInfoContainer = document.getElementById('playerInfoContainer');
+var $togglePlayer = document.getElementById('togglePlayer');
+
+$togglePlayer.addEventListener('click', function() {
+    var isOpen = $playerInfoContainer.classList.contains('slide-in');
+	if (isOpen) {
+		
+		$('#sidePlayer').animate({
+			'backgroundColor': '#fff'
+		});
+		
+		$('#dim-wrapper').animate({
+			'opacity':0
+		}, function() {
+			document.getElementById('dim-wrapper').style.zIndex = '-1';
+			document.getElementById('sidePlayer').style.zIndex = 'auto';
+			document.getElementById('playerInfoContainer').style.zIndex = 'auto';
+			document.getElementById('togglePlayer').style.backgroundImage = "url('/images/player.png')";
+		});
+		
+	} else {
+		document.getElementById('dim-wrapper').style.zIndex = '1';
+		document.getElementById('sidePlayer').style.zIndex = '2';
+		document.getElementById('playerInfoContainer').style.zIndex = '2';
+		
+		document.getElementById('togglePlayer').style.backgroundImage = "url('/images/player_select.png')";
+		
+		$('#dim-wrapper').animate({
+			'opacity':0.5,
+		});
+		
+	}
+
+    $playerInfoContainer.setAttribute('class', isOpen ? 'slide-out' : 'slide-in');
+});
+
 $(document).ready(function() {
     var table = $('.search-results').DataTable( {
 			'searching': false,
@@ -49,69 +147,10 @@ $(document).ready(function() {
 				});
 			});
 		});
+		
+		chart.data.datasets[0].data[6] += 1;
+		chart.update();
+		
 	});
 
-});
-
-
-
-var ctx = document.getElementById('myChart');
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: lwDate,
-        datasets: [{
-            label: 'Number of tweets',
-            data: lwCount,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 2
-        }]
-    },
-    options: {
-		responsive: false,
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});
-
-var $myChart = document.getElementById('myChart');
-var $toggle = document.getElementById('toggleChart');
-
-$toggle.addEventListener('click', function() {
-    var isOpen = $myChart.classList.contains('slide-in');
-	if (isOpen) {
-		
-		$('#sideChart').animate({
-			'backgroundColor': '#fff'
-		});
-		
-		$('#dim-wrapper').animate({
-			'opacity':0
-		}, function() {
-			document.getElementById('dim-wrapper').style.zIndex = '-1';
-			document.getElementById('sideChart').style.zIndex = 'auto';
-			document.getElementById('myChart').style.zIndex = 'auto';
-			document.getElementById('toggleChart').style.backgroundImage = "url('/images/chart.png')";
-		});
-		
-	} else {
-		document.getElementById('dim-wrapper').style.zIndex = '1';
-		document.getElementById('sideChart').style.zIndex = '2';
-		document.getElementById('myChart').style.zIndex = '2';
-		
-		document.getElementById('toggleChart').style.backgroundImage = "url('/images/chart_select.png')";
-		
-		$('#dim-wrapper').animate({
-			'opacity':0.5,
-		});
-		
-	}
-
-    $myChart.setAttribute('class', isOpen ? 'slide-out' : 'slide-in');
 });

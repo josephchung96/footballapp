@@ -48,12 +48,65 @@ var app = {
 
         // RESULTS PAGE redirect to homepage
         $("#btnBack").on("click", function() {
+            //Reset loading bar
+            $("#myBar").width("1%");
+            document.getElementById("status").innerHTML = "";
+
+            //Destroy datatable object
+            table.destroy();
+            //Remove all the DOM elements
+            $('#tweets').empty();
+
+            //Destroy chart object
+            chart.destroy();
+            chart = null;
+
             $("#results_page").toggleClass("hide");
             $("#home_page").toggleClass("hide");
+
+        });
+
+        //Chart slide sidebutton
+        var $chart = document.getElementById('chart');
+        var $toggle = document.getElementById('toggleChart');
+
+        $toggle.addEventListener('click', function() {
+            var isOpen = $chart.classList.contains('slide-in');
+        	if (isOpen) {
+
+        		$('#sideChart').animate({
+        			'backgroundColor': '#fff'
+        		});
+
+        		$('#dim-wrapper').animate({
+        			'opacity':0
+        		}, function() {
+        			document.getElementById('dim-wrapper').style.zIndex = '-1';
+        			document.getElementById('sideChart').style.zIndex = 'auto';
+        			document.getElementById('chart').style.zIndex = 'auto';
+        			document.getElementById('toggleChart').style.backgroundImage = "url(./images/chart.png)";
+        		});
+
+        	} else {
+        		document.getElementById('dim-wrapper').style.zIndex = '1';
+        		document.getElementById('sideChart').style.zIndex = '2';
+        		document.getElementById('chart').style.zIndex = '2';
+                document.getElementById('toggleChart').style.backgroundImage = "url(./images/chart_select.png)";
+
+        		$('#dim-wrapper').animate({
+        			'opacity':0.5,
+        		});
+
+        	}
+
+            $chart.setAttribute('class', isOpen ? 'slide-out' : 'slide-in');
         });
 
     }
 };
+var socket;
+var table;
+var chart;
 
 // used to toggle the different textboxes
 function toggleSearch() {
@@ -136,6 +189,30 @@ function validateForm() {
 
     authorInit = author.charAt(0);
 
+    playerToTeam = $("#playerToTeam").val();
+	teamToAuthor = $("#teamToAuthor").val();
+	authorToPlayer = $("#authorToPlayer").val();
+
+    authorInit = author.charAt(0);
+
+	if (playerToTeam!='') {
+		if (player=='' || team=='') {
+			alert("Search field cannot be empty");
+			return false;
+		}
+	}
+	if (teamToAuthor!='') {
+		if (team=='' || author=='') {
+			alert("Search field cannot be empty");
+			return false;
+		}
+	}
+	if (authorToPlayer!='') {
+		if (player=='' || author=='') {
+			alert("Search field cannot be empty");
+			return false;
+		}
+	}
     if (player=='' && team=='' && author=='') {
         alert("Search field cannot be empty");
     }else if (authorInit!='@' && authorInit!='') {
@@ -156,8 +233,11 @@ function sendAjaxQuery(url, data) {
         success: function (data) { // redirect
             $("#home_page").toggleClass("hide");
             $("#loading_bar").toggleClass("hide");
-            var socket = io.connect('http://10.0.2.2:3000');
-            updateLoading(socket);
+            if (socket!=null) {
+                socket.disconnect() ;
+            }
+            socket = io.connect('http://10.0.2.2:3000');
+            socketUpdate(socket);
         },
         error: function (xhr, status, error) {
         }
@@ -181,13 +261,13 @@ $.fn.serializeObject = function () {
 };
 
 // loading  bar
-function updateLoading(socket) {
+function socketUpdate(socket) {
     socket.on('dbOnly', function(data){
 		var bar = document.getElementById("myBar");
 		var status = document.getElementById("status");
 
 		var width = 1;
-		var redirectDelay = 3000;
+		var redirectDelay = 2000;
 		var progress;
 
 		function frame() {
@@ -215,6 +295,7 @@ function updateLoading(socket) {
                 $("#loading_bar").toggleClass("hide");
                 $("#results_page").toggleClass("hide");
                 initializeTable(data.tweets);
+                initializeChart(data.lwDate, data.lwCount);
 			}, redirectDelay);
 		}
 
@@ -227,7 +308,7 @@ function updateLoading(socket) {
 
 		var width;
 		var progress;
-		var redirectDelay = 3000;
+		var redirectDelay = 2000;
 
 		function frame() {
 			if (width >= progress) {
@@ -258,16 +339,40 @@ function updateLoading(socket) {
                 $("#loading_bar").toggleClass("hide");
                 $("#results_page").toggleClass("hide");
                 initializeTable(data.tweets);
+                initializeChart(data.lwDate, data.lwCount);
 			}, redirectDelay);
 		}
 
 		var id = setInterval(frame, 10);
 	});
+
+	socket.on('tweet', function(data){
+        var author = "<a href='https://twitter.com/"+data.tweet.screenname+"'>"+data.tweet.username+"</a>\
+            <br/><a class='screenname' href='https://twitter.com/"+data.tweet.screenname+"'>@"+data.tweet.screenname+"</a>";
+        var content = data.tweet.content;
+        var link = "<a class='tweeturl' href='https://twitter.com/id/status/"+data.tweet.tweetID+"'><span class='fa fa-external-link'></span></a>";
+        var date = data.tweet.date;
+
+        var row = table.row.add([
+                author,
+                content,
+                link,
+                date
+            ]).draw().node();
+        $( row ).css({
+            backgroundColor:'#efb7c2'
+        });
+        if (chart!=null) {
+            chart.data.datasets[0].data[6] += 1;
+            chart.update();
+        }
+    });
 }
 
 // settings for the results table
 function initializeTable(tweets){
-    var table = $('.search-results').DataTable( {
+
+    table = $('.search-results').DataTable( {
         'searching': false,
         'lengthChange': false,
         'info': false,
@@ -284,6 +389,7 @@ function initializeTable(tweets){
             }
         }
     });
+
     // iterate over all the tweets
     for (tweet in tweets) {
         var author = "<a href='https://twitter.com/"+tweets[tweet][1]+"'>"+tweets[tweet][0]+"</a><br/><a class='screenname' href='https://twitter.com/"+tweets[tweet][1]+"'>@"+tweets[tweet][1]+"</a>";
@@ -300,5 +406,33 @@ function initializeTable(tweets){
     }
 }
 
+// settings for the results chart
+function initializeChart(lwDate, lwCount) {
+    var ctx = document.getElementById('chart');
+    chart = new Chart(ctx, {
+        // frequency chart
+        type: 'line',
+        data: {
+            labels: lwDate,
+            datasets: [{
+                label: 'Number of tweets',
+                data: lwCount,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+    		responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+}
 
 app.initialize();

@@ -55,21 +55,20 @@
                             <input type="text" class="hide" id="player" name="player" placeholder="Search for player">
                         </div>
                         <div id="btnAndOr">
-                            <input type="button" class="btn btn-default hide" id="playerToTeam" name="playerToTeam" value="and"/>
-                            <input type="button" class="btn btn-default hide" id="authorToPlayer" name="authorToPlayer" value="and"/>
+                            <input type="text" class="btn btn-default hide" id="playerToTeam" name="playerToTeam" readonly/>
+                            <input type="text" class="btn btn-default hide" id="authorToPlayer" name="authorToPlayer" readonly/>
                         </div>
                         <div id="team-search">
                             <input type="text" class="hide" id="team" name="team" placeholder="Search for team">
                         </div>
                         <div id="btnAndOr2">
-                            <input type="button" class="btn btn-default hide" id="teamToAuthor" name="teamToAuthor" value="and"/>
+                            <input type="text" class="btn btn-default hide" id="teamToAuthor" name="teamToAuthor" readonly/>
                         </div>
                         <div id="author-search">
                             <input type="text" class="hide" id="author" name="author" placeholder="Search for author">
                         </div>
                         <label class="hide" id="searchOption">
                             <input id="database" type="checkbox" name="database" value="true"/> Only Database
-
                         </label>
                         <input class="hide" id="submit" type="submit" value="Search"/>
                     </form>
@@ -90,30 +89,32 @@
                 <p id="status">Connecting to the database...</p>
             </div>
             <div id="results_page" class="hide">
+                <div id="dim-wrapper"></div>
                 <input type="button" id="btnBack" class="btn btn-default fa fa-reply" value="Back"/>
                 <h1 class="cover-heading">Search results:
                     <div class="sideButton" id="sideChart">
                         <div id="toggleChart"></div>
-                        <canvas class="hide" id="myChart" width="400" height="400"></canvas>
-                        <table class="search-results">
-                            <thead>
-                            <tr>
-                                <th class="author">Author</th>
-                                <th class="tweet">Tweet</th>
-                                <th class="link"></th>
-                                <th class="date">Date</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tweets"></tbody>
-                        </table>
                     </div>
+                    <canvas class="hide" id="chart" width="300" height="300">asd</canvas>
+                    <table class="search-results">
+                        <thead>
+                        <tr>
+                            <th class="author">Author</th>
+                            <th class="tweet">Tweet</th>
+                            <th class="link"></th>
+                            <th class="date">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tweets"></tbody>
+                    </table>
                 </h1>
             </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-        <script type="text/javascript" src="js/socket.io.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="js/socket.io.js"></script>
+        <script type="text/javascript" src="js/chart.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

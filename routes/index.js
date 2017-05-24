@@ -467,6 +467,8 @@ router.post('/postFile', function(req, res){
 			} else {
 				req.app.set('playerInfo', '');
 			}
+		} else {
+			req.app.set('playerInfo', '');
 		}
 	}
 	
@@ -582,7 +584,6 @@ router.post('/postFile', function(req, res){
 
 		// STREAMING API
 			var userID;
-			var stream;
 			
 			if (author) {
 				client.get('users/show', {screen_name: author.substring(1)} , function(err, data, response) {
@@ -592,18 +593,16 @@ router.post('/postFile', function(req, res){
 					if (currentStream) {
 						currentStream.stop();
 					}
-					stream = client.stream('statuses/filter', { track: tracks, follow: userID });
-					currentStream = stream;
-					streamTweets(stream, connection, dbErr);
+					currentStream = client.stream('statuses/filter', { track: tracks, follow: userID });
+					streamTweets(currentStream, connection, dbErr);
 				});
 				
 			} else {
 				if (currentStream) {
 					currentStream.stop();
 				}
-				stream = client.stream('statuses/filter', { track: tracks });
-				currentStream = stream;
-				streamTweets(stream, connection, dbErr);
+				currentStream = client.stream('statuses/filter', { track: tracks });
+				streamTweets(currentStream, connection, dbErr);
 			}
 
 			

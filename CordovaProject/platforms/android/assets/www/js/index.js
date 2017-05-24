@@ -50,7 +50,8 @@ var app = {
         $("#btnBack").on("click", function() {
             //Reset loading bar
             $("#myBar").width("1%");
-            document.getElementById("status").innerHTML = "";
+            $("#myBar").css("background-color","#4CAF50");
+            document.getElementById("status").innerHTML = "Connecting to the database...";
 
             //Destroy datatable object
             table.destroy();
@@ -322,6 +323,11 @@ function socketUpdate(socket) {
             setTimeout(function() {
                 $("#loading_bar").toggleClass("hide");
                 $("#home_page").toggleClass("hide");
+
+                //Reset loading bar
+                $("#myBar").width("1%");
+                $("#myBar").css("background-color","#4CAF50");
+                document.getElementById("status").innerHTML = "Connecting to the database...";
             }, redirectDelay);
 		}
 		if (data.message=='done') {

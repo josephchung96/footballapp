@@ -243,6 +243,7 @@ html {
 .sideMenu {
   position: absolute;
   right: 0px;
+  top: 24px;
 }
 .sideButton {
   position: absolute;
@@ -251,11 +252,11 @@ html {
   border: 2px solid #630015;
   cursor: pointer;
   right: 0px;
-  width: 64px;
-  height: 64px;
+  width: 32px;
+  height: 32px;
 }
 #sidePlayer {
-  top: 80px;
+  top: 32px;
 }
 #playerInfoContainer {
   width: 70%;
@@ -265,7 +266,7 @@ html {
   left: 0;
   right: 0;
   bottom: 0;
-  font-size: 20px;
+  font-size: 14px;
   background-color: #A82B44;
   position: absolute;
   box-shadow: inset 0px 0px 200px #630015;
@@ -274,6 +275,15 @@ html {
   transform: translateX(-300%);
   -webkit-transform: translateX(-300%);
 }
+.detail {
+  width: 90%;
+  margin:auto;
+  margin-top: 20px;
+}
+.detail .field {
+  padding-top:10px;
+  padding-bottom:10px;
+}
 #toggleChart {
   margin: auto;
   position: absolute;
@@ -281,12 +291,12 @@ html {
   right: 0;
   bottom: 0;
   left: 0;
-  width: 48px;
-  height: 48px;
+  width: 24px;
+  height: 24px;
   background-image: url(../images/chart.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 48px;
+  background-size: 24px;
 }
 #togglePlayer {
   margin: auto;
@@ -295,12 +305,12 @@ html {
   right: 0;
   bottom: 0;
   left: 0;
-  width: 48px;
-  height: 48px;
+  width: 24px;
+  height: 24px;
   background-image: url(../images/player.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 48px;
+  background-size: 24px;
 }
 .slide-in {
   animation: slide-in 1s forwards;

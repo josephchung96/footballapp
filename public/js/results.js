@@ -1,5 +1,16 @@
+/**
+* Football gossip is a data mining tool which
+* uses twiiter api. and dbpedia to achieve the goal.
+*
+* @author  Wyman Chung, Joseph Chung, Declan Hui
+* @version 1.0
+* @since   2017-05-24
+*/
+
+// initialize socket.io
 var socket = io();
 
+// initialize chart object
 var ctx = document.getElementById('chart');
 var chart = new Chart(ctx, {
     type: 'line',
@@ -25,6 +36,7 @@ var chart = new Chart(ctx, {
     }
 });
 
+// chart sliding side button controller
 var $chart = document.getElementById('chart');
 var $toggleChart = document.getElementById('toggleChart');
 
@@ -62,7 +74,7 @@ $toggleChart.addEventListener('click', function() {
 });
 
 
-
+// player info sliding side button controller
 var $playerInfoContainer = document.getElementById('playerInfoContainer');
 var $togglePlayer = document.getElementById('togglePlayer');
 
@@ -104,6 +116,8 @@ if ($togglePlayer!=null) {
 
 
 $(document).ready(function() {
+	
+	// initialize datatable object
     var table = $('.search-results').DataTable( {
 			'searching': false,
 			'lengthChange': false,
@@ -121,7 +135,8 @@ $(document).ready(function() {
 				}
 			}
 		});
-
+	
+	// socket.io on 'tweet'
 	socket.on('tweet', function(data){
 		var author = "<a href='https://twitter.com/"+data.tweet.screenname+"'>"+data.tweet.username+"</a>\
 			<br/><a class='screenname' href='https://twitter.com/"+data.tweet.screenname+"'>@"+data.tweet.screenname+"</a>";

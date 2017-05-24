@@ -1,6 +1,11 @@
-/*
- * Globals
- */
+/**
+* Football gossip is a data mining tool which
+* uses twiiter api. and dbpedia to achieve the goal.
+*
+* @author  Wyman Chung, Joseph Chung, Declan Hui
+* @version 1.0
+* @since   2017-05-24
+*/
 
 /* Links */
 a,
@@ -140,6 +145,10 @@ body {
 .btn#button-author{
   border-radius: 0px 6px 6px 0px;
 }
+
+/*
+ * Index search box
+ */
 .search {
   color: #000;
   font-size: 16px;
@@ -192,36 +201,9 @@ body {
   text-shadow: none;
 }
 
-
-#team-description {
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  font-size: 16px;
-  background-color: #eee;
-  padding: 14px 10px 15px;
-  text-shadow: none;
-}
-.ui-menu{
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  background-color:#fff;
-  color: #000;
-  width: 30%;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  text-align:left;
-  text-shadow: none;
-}
-.team-name{
-  font-weight: bold;
-}
-.team-desc{
-  color: #888
-}
-.ui-menu-item:hover{
-  background-color: #ffe6eb;
-}
+/*
+ * Result side menu
+ */
 .sideMenu {
   position: absolute;
   right: 0px;
@@ -239,6 +221,60 @@ body {
 #sidePlayer {
   top: 125px;
 }
+#toggleChart {
+  margin: auto;
+  position: absolute;
+  top: 0; 
+  right: 0;
+  bottom: 0; 
+  left: 0;
+  width: 64px;
+  height: 64px;
+  background-image: url('/images/chart.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 64px;
+}
+#togglePlayer {
+  margin: auto;
+  position: absolute;
+  top: 0; 
+  right: 0;
+  bottom: 0; 
+  left: 0;
+  width: 64px;
+  height: 64px;
+  background-image: url('/images/player.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 64px;
+}
+.slide-in {
+  animation: slide-in 1s forwards;
+  -webkit-animation: slide-in 1s forwards;
+}
+.slide-out {
+  animation: slide-out 1s forwards;
+  -webkit-animation: slide-out 1s forwards;
+}
+@keyframes slide-in {
+  100% { transform: translateX(0%); }
+}
+@-webkit-keyframes slide-in {
+  100% { -webkit-transform: translateX(0%); }
+}
+@keyframes slide-out {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-300%); }
+}
+@-webkit-keyframes slide-out {
+  0% { -webkit-transform: translateX(0%); }
+  100% { -webkit-transform: translateX(-300%); }
+}
+
+/*
+ * player info
+ */
 #playerInfoContainer {
   width: 640px;
   height: 480px;
@@ -275,6 +311,10 @@ body {
   padding: 20px 0px;
   width: 30%;
 }
+
+/*
+ * Chart
+ */
 #chart {
   padding: 20px;
   border: 2px solid #630015;
@@ -288,62 +328,10 @@ body {
   transform: translateX(-300%);
   -webkit-transform: translateX(-300%);
 }
-#toggleChart {
-  margin: auto;
-  position: absolute;
-  top: 0; 
-  right: 0;
-  bottom: 0; 
-  left: 0;
-  width: 64px;
-  height: 64px;
-  background-image: url('/images/chart.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 64px;
-}
-#togglePlayer {
-  margin: auto;
-  position: absolute;
-  top: 0; 
-  right: 0;
-  bottom: 0; 
-  left: 0;
-  width: 64px;
-  height: 64px;
-  background-image: url('/images/player.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 64px;
-}
-.slide-in {
-  animation: slide-in 1s forwards;
-  -webkit-animation: slide-in 1s forwards;
-}
 
-.slide-out {
-  animation: slide-out 1s forwards;
-  -webkit-animation: slide-out 1s forwards;
-}
-  
-@keyframes slide-in {
-  100% { transform: translateX(0%); }
-}
-
-@-webkit-keyframes slide-in {
-  100% { -webkit-transform: translateX(0%); }
-}
-  
-@keyframes slide-out {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-300%); }
-}
-
-@-webkit-keyframes slide-out {
-  0% { -webkit-transform: translateX(0%); }
-  100% { -webkit-transform: translateX(-300%); }
-}
-
+/*
+ * Search results
+ */
 .search-results {
   font-size: 18px;
   text-align: left;
@@ -416,6 +404,9 @@ body {
   color: #fff;
 }
 
+/*
+ * Loading bar
+ */
 #myProgress {
   width: 60%;
   margin: auto;

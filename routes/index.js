@@ -1,3 +1,12 @@
+/**
+* Football gossip is a data mining tool which
+* uses twiiter api. and dbpedia to achieve the goal.
+*
+* @author  Wyman Chung, Joseph Chung, Declan Hui
+* @version 1.0
+* @since   2017-05-24
+*/
+
 var express = require('express');
 var router = express.Router();
 var dbcon = require('../config/db.js');
@@ -17,6 +26,7 @@ router.get('/', function(req, res, next) {
 	}
 });
 
+/* POST form page. */
 router.post('/postFile', function(req, res){
 	var today = new Date();
 	var lastWeek = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
@@ -248,7 +258,11 @@ router.post('/postFile', function(req, res){
 		lastWeekDates[day] = lastWeek.getFullYear() + '-' + (lastWeek.getMonth()+1) + '-' + (lastWeek.getDate()+day);
 	} 
 	
-//64bit int subtraction work around
+/** 
+*	decStrNum is a 64bit int subtraction work around which
+*	take a 64 character string and convert it into float number
+*	@param n int need to be worked around
+*/
 	function decStrNum (n) {
 		n = n.toString();
 		var result=n;
@@ -266,7 +280,15 @@ router.post('/postFile', function(req, res){
 		return result;
 	}
 	
-//recursive searching
+/**
+*	searchTweets is a recursive searching method to exceed the 
+*	limited amount,100 tweets, for each call.
+*	@param query the twitter query
+*	@param count searches per call
+*	@param totalCount total searches
+*	@param connection mysql database connection
+*	@param dbErr mysql database connection err
+*/
 	function searchTweets(query, count, totalCount, connection, dbErr){
 		search.q = query;
 		search.count = count;
@@ -320,7 +342,13 @@ router.post('/postFile', function(req, res){
 		});
 	}
 
-//twitter streaming into db
+/**
+*	streamTweets used twitter streaming api to
+*	listen on twitter tweets post
+*	@param stream stream filter
+*	@param connection mysql database connection
+*	@param dbErr mysql database connection err
+*/
 	function streamTweets(stream, connection, dbErr) {
 		stream.on('tweet', function (tweet) {
 			var username= tweet.user.name;
@@ -366,7 +394,9 @@ router.post('/postFile', function(req, res){
 		});
 	}
 
-//dbpedia query
+/**
+*	searchdbpedia used sparql to search on dbpedia
+*/
 	function searchdbpedia(){
 		
 		if (player) {
@@ -441,7 +471,6 @@ router.post('/postFile', function(req, res){
 	}
 	
 //search
-
 //query combination guards
 	if (playerToTeam=='or') {
 		query = player + ' OR ' + team;
@@ -483,6 +512,7 @@ router.post('/postFile', function(req, res){
 		}
 	}
 
+//mysql database connection callback
 	dbcon.connectdb(function(dbErr, connection){
 
 		if (database) {
@@ -587,6 +617,7 @@ router.post('/postFile', function(req, res){
 	res.send(req.body);	
 });
 
+/* GET results page. */
 router.get('/results', function(req, res, next) {
 	var tweetData = req.app.get('tweetData');
 	var lastWeekCount = req.app.get('lastWeekCount');

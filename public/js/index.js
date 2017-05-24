@@ -1,6 +1,17 @@
+/**
+* Football gossip is a data mining tool which
+* uses twiiter api. and dbpedia to achieve the goal.
+*
+* @author  Wyman Chung, Joseph Chung, Declan Hui
+* @version 1.0
+* @since   2017-05-24
+*/
+
+// socket.on handling loading progress
 if (query) {
 	var socket = io();
 
+	// database only searches action
 	socket.on('dbOnly', function(data){
 		var bar = document.getElementById("myBar");
 		var status = document.getElementById("status");
@@ -38,6 +49,7 @@ if (query) {
 		var id = setInterval(frame, 10);
 	});
 	
+	// twitter rest api searches action
 	socket.on('restAPI', function(data){
 		var bar = document.getElementById("myBar");
 		var status = document.getElementById("status");
@@ -81,6 +93,10 @@ if (query) {
 	});
 }
 
+/** 
+*	toggleSearch is a function to toggle the input field in search box
+* 	@param id the id used to identify the field
+*/
 function toggleSearch(id) {
 	id = id.split("-")[1];
 	var searchBar = document.getElementById(id);
@@ -137,6 +153,11 @@ function toggleSearch(id) {
 
 }
 
+
+/** 
+*	toggleOperand is a function to toggle the operand between input field in search box
+* 	@param id the id used to identify the field
+*/
 function toggleOperand(id) {
 	var button = document.getElementById(id);
 	if (button.value=='and') {
@@ -146,6 +167,10 @@ function toggleOperand(id) {
 	}
 }
 
+/** 
+*	validateForm is a function to validate the submitted form
+* 	@return false if the form could not pass validation
+*/
 function validateForm() {
 
     var player;
@@ -193,6 +218,12 @@ function validateForm() {
 	}
 }
 
+
+/** 
+*	sendAjaxQuery is a function to send from as ajax query
+* 	@param url the destination of post file
+* 	@param data the data of the post file
+*/
 function sendAjaxQuery(url, data) {
 	$.ajax({
 		type: 'POST',

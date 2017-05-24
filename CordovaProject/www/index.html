@@ -37,10 +37,10 @@
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <title>Footballapp</title>
     </head>
-    <body onload="app.initialize()">
+    <body>
         <div class="app">
             <!-- home page-->
-            <div id="home_page" style="display:block;">
+            <div id="home_page">
                 <h1>Football Gossip</h1>
                 <h4>Gossip is more popular than literature</h4>
                 Search by:<br>
@@ -49,46 +49,103 @@
                     <button class="btn btn-large btn-default" id="btnTeam" name="btnTeam"><i class="fa fa-users"></i>Team</button>
                     <button class="btn btn-large btn-default" id="btnAuthor" name="btnAuthor"><i class="fa fa-pencil-square-o"></i>Author</button>
                 </div>
-                <div id="search-boxes">
-                    <form id="search-form">
-                        <div class="form-layout" id="player-search" style="display:none">
-                            <input type="text" id="player" name="player" placeholder="Search for player">
+                <div id="search-boxes" class="form-layout">
+                    <form id="search-form" name="search-form" class="search-form">
+                        <div id="player-search">
+                            <input type="text" class="hide" id="player" name="player" placeholder="Search for player">
                         </div>
-                        <div>
-                            <button class="btn btn-default" id="btnAndOr1" name="btnAndOr1">and</button>
+                        <div id="btnAndOr">
+                            <input type="text" class="btn btn-default hide" id="playerToTeam" name="playerToTeam" readonly/>
+                            <input type="text" class="btn btn-default hide" id="authorToPlayer" name="authorToPlayer" readonly/>
                         </div>
                         <div id="team-search">
-                            <input type="text" id="team" name="team" placeholder="Search for team">
+                            <input type="text" class="hide" id="team" name="team" placeholder="Search for team">
                         </div>
-                        <div>
-                            <!-- <input type="button" class="btn btn-default" id="btnAndOr2" name="btnAndOr2" value="and"/> -->
-                            <button class="btn btn-default" id="btnAndOr2" name="btnAndOr2">and</button>
+                        <div id="btnAndOr2">
+                            <input type="text" class="btn btn-default hide" id="teamToAuthor" name="teamToAuthor" readonly/>
                         </div>
                         <div id="author-search">
-                            <input type="text" id="author" name="author" placeholder="Search for author">
+                            <input type="text" class="hide" id="author" name="author" placeholder="Search for author">
                         </div>
-                        <div id="searchQuery" class="form-layout">
-                            <button id="btnSearch" class="btn btn-primary">Search</button>
-                        </div>
+                        <label class="hide" id="searchOption">
+                            <input id="database" type="checkbox" name="database" value="true"/> Only Database
+                        </label>
+                        <input class="hide" id="submit" type="submit" value="Search"/>
                     </form>
                 </div>
                 <div id="errorMsg" style="display:none">
                 </div>
             </div>
-
-            <!-- results page -->
-            <div id="results_page" style="display:none;">
-                <a href="#home_page" class="btn btn-default fa fa-reply">Back</a>
-                <div id="search-results">
-                    Search results:
+            <!-- loading bar page -->
+            <div id="loading_bar" class="hide">
+                <h1>Football Gossip</h1>
+                <p class="lead"></p>
+                <p class="lead">Loading...</p>
+                <div class="myProgress" id="myProgress">
+                    <div class="myBar" id="myBar">
+                    </div>
                 </div>
-                <div id="trend-results">
-                    Frequency:
-                </div>
+                <br>
+                <p id="status">Connecting to the database...</p>
+            </div>
+            <div id="results_page" class="hide">
+                <div id="dim-wrapper"></div>
+                <input type="button" id="btnBack" class="btn btn-default fa fa-reply" value="Back"/>
+                <h1 class="cover-heading">Search results:
+                    <div class="sideMenu">
+                        <div class="sideButton" id="sideChart">
+                            <div id="toggleChart"></div>
+                        </div>
+                        <div class="sideButton hide" id="sidePlayer">
+                            <div id="togglePlayer"></div>
+                        </div>
+                    </div>
+                    <canvas class="hide" id="chart" width="300" height="300">asd</canvas>
+                    <div class="hide" id="playerInfoContainer">
+                        <h1 class="cover-heading">Player Infomation</h1>
+                        <table class="playerTable">
+                            <tr class="photo"><img id="playerPhoto" alt="twitter_photo"/></tr>
+                            <tr>
+                                <table class="detail">
+                                    <tr>
+                                        <td class="field">Name:</td>
+                                        <td id="playerName" class="content"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Position:</td>
+                                        <td id="playerPos" class="content"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Date of Birth:</td>
+                                        <td id="playerDob" class="content"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field">Team:</td>
+                                        <td id="playerTeam" class="content"></td>
+                                    </tr>
+                                </table>
+                            </tr>
+                        </table>
+                    </div>
+                    <table class="search-results">
+                        <thead>
+                        <tr>
+                            <th class="author">Author</th>
+                            <th class="tweet">Tweet</th>
+                            <th class="link"></th>
+                            <th class="date">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tweets"></tbody>
+                    </table>
+                </h1>
             </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="js/socket.io.js"></script>
+        <script type="text/javascript" src="js/chart.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

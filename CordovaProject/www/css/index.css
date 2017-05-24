@@ -24,62 +24,321 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #A7A7A7),
-        color-stop(0.51, #E4E4E4)
-    );
-    background-attachment:fixed;
+    background:url(../images/splash.jpg) no-repeat bottom fixed;
+    background-size: cover;
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:12px;
     height:100%;
+    width:100%;
     margin:0px;
     padding:0px;
     text-transform:uppercase;
-    width:100%;
+    overflow-y:scroll;
+}
+
+html {
+    height:100%;
+    overflow-y:hidden;
 }
 
 /* Portrait layout (default) */
 .app {
-    background:url(../img/splash.jpg) no-repeat; /* 170px x 200px */
-    position:absolute;             /* position in the center of the screen */
-    width:100%;
-    height:100%;
-    background-size:cover;
+    color: #fff;
 }
 
 .app #home_page {
     text-align:center;
 }
 
-.app #results_page a {
-    padding: 20px 20px 0px 0px;
+.app #loading_bar {
+    text-align:center;
+}
+
+.app #results_page {
+    text-align:center;
 }
 
 .app h1 {
-  padding:50px 0px 0px 0px;
+  margin-top:50px;
+}
+
+.app #btnBack {
+    margin-top:-30px;
+    position:absolute;
+    left:10px;
 }
 
 .form-layout {
+    color:#000;
     padding: 10px 0px 0px 0px;
 }
 
-/* Landscape layout (with min-width) */
+/* Custom default button */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
+  box-shadow: 5px 5px 5px #333;
+}
+
+.search-form {
+  color: #000;
+  font-size: 16px;
+}
+.search-form input[type=text] {
+  width: 75%;
+  box-sizing: border-box;
+  border: 3px solid #333;
+  background-color: #fff;
+  background-size: 25px;
+  background-image: url(../images/searchicon.png);
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+.search-form input[type=text]:focus {
+  width: 90%;
+}
+.search-form input[type=text].optional {
+  border: 3px solid #ccc;
+}
+.search-form input#playerToTeam,
+.search-form input#authorToPlayer,
+.search-form input#teamToAuthor,
+.search-form label#searchOption,
+.search-form input[type=submit] {
+  background: #ccc;
+  border: 3px solid #333;
+  cursor:pointer;
+  text-align: center;
+  padding: 12px 2px;
+  margin: auto;
+}
+.search-form input#playerToTeam,
+.search-form input#authorToPlayer,
+.search-form input#teamToAuthor {
+  width: 50px;;
+}
+.search-form input[type=submit] {
+  width: 75px;
+  font-weight:700;
+}
+.search-form input#database{
+  margin:0px;
+}
+.search-form label#searchOption {
+  font-weight: 100;
+  text-shadow: none;
+}
+#myProgress {
+  width: 60%;
+  margin: auto;
+  background-color: #ddd;
+  border-radius: 10px;
+  border: 3px solid #333;
+  box-shadow: 2px 2px 10px #333;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50;
+  border-radius: 5px;
+}
+#dim-wrapper {
+  height:100%;
+  width:100%;
+  position:fixed;
+  left:0;
+  top:0;
+  opacity: 0;
+  background-color:black;
+  z-index: -1;
+}
+.search-results {
+  margin:auto;
+  width:90%;
+  font-size: 10px;
+  text-align: left;
+  color: #333;
+  border: 2px solid #630015;
+  background-color: rgba(255,255,255,.9);
+}
+.search-results thead tr{
+  cursor: pointer;
+  border: 2px solid #630015;
+}
+.search-results thead th.sorting{
+  background: url(../images/sort_both.png) no-repeat right;
+}
+.search-results thead th.sorting_asc{
+  background: url(../images/sort_asc.png) no-repeat right;
+}
+.search-results thead th.sorting_desc{
+  background: url(../images/sort_desc.png) no-repeat right;
+}
+.search-results tbody tr{
+  border-top: 2px solid #efb7c2;
+}
+.search-results tbody tr:hover{
+  background-color: rgba(94,72,76,.1);
+}
+.search-results tbody td.sorting_1{
+  background-color: rgba(94,72,76,.1);
+}
+.search-results a{
+  color: #333;
+}
+.search-results a:hover,
+.search-results a:focus,
+.search-results a:visited{
+  text-decoration: none;
+}
+.search-results th,
+.search-results td{
+  padding: 10px;
+}
+.search-results .tweet{
+  width: 30%;
+}
+.search-results .screenname{
+  color: #691727;
+}
+.search-results th:focus{
+  outline: none;
+  text-decoration: none;
+}
+.dataTables_paginate a:hover,
+.dataTables_paginate a:focus{
+  outline: none;
+  text-decoration: none;
+}
+.paginate_button{
+  cursor: pointer;
+  color: #efb7c2;
+  font-size: 24px;
+  padding: 10px;
+}
+.paginate_button.current{
+  color: #fff;
+}
+#chart {
+  padding: 20px;
+  border: 2px solid #630015;
+  background-color: rgba(255,255,255,1);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  transform: translateX(-300%);
+  -webkit-transform: translateX(-300%);
+}
+.sideMenu {
+  position: absolute;
+  right: 0px;
+}
+.sideButton {
+  position: absolute;
+  background: rgba(255,255,255,1);
+  border-radius: 10px 0px 0px 10px;
+  border: 2px solid #630015;
+  cursor: pointer;
+  right: 0px;
+  width: 64px;
+  height: 64px;
+}
+#sidePlayer {
+  top: 80px;
+}
+#playerInfoContainer {
+  width: 70%;
+  height: 80%;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 20px;
+  background-color: #A82B44;
+  position: absolute;
+  box-shadow: inset 0px 0px 200px #630015;
+  -webkit-box-shadow: inset 0px 0px 200px #630015;
+  text-shadow: 2px 2px 5px #000;
+  transform: translateX(-300%);
+  -webkit-transform: translateX(-300%);
+}
+#toggleChart {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  background-image: url(../images/chart.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 48px;
+}
+#togglePlayer {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  background-image: url(../images/player.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 48px;
+}
+.slide-in {
+  animation: slide-in 1s forwards;
+  -webkit-animation: slide-in 1s forwards;
+}
+
+.slide-out {
+  animation: slide-out 1s forwards;
+  -webkit-animation: slide-out 1s forwards;
+}
+
+@keyframes slide-in {
+  100% { transform: translateX(0%); }
+}
+
+@-webkit-keyframes slide-in {
+  100% { -webkit-transform: translateX(0%); }
+}
+
+@keyframes slide-out {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-300%); }
+}
+
+@-webkit-keyframes slide-out {
+  0% { -webkit-transform: translateX(0%); }
+  100% { -webkit-transform: translateX(-300%); }
+}
+/* Landscape layout (with min-width) *//*
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
     .app {
         background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height
         margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
+                                      /* offset horizontal: half of image width and text area width
     }
 }
-
+/*
 h1 {
     font-size:24px;
     font-weight:normal;
@@ -124,3 +383,21 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+/* loading page
+
+#myProgress {
+  width: 60%;
+  margin: auto;
+  background-color: #ddd;
+  border-radius: 10px;
+  border: 3px solid #333;
+  box-shadow: 2px 2px 10px #333;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50;
+  border-radius: 5px;
+}*/
